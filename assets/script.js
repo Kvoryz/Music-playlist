@@ -165,7 +165,7 @@ class MusicPlayer {
       {
         title: "Bad Habit",
         artist: "Steve Lacy",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Music/Steve Lacy - Bad Habit.mp3",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Steve Lacy - Bad Habit.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/steve.jpg",
       },
