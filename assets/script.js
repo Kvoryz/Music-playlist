@@ -123,7 +123,7 @@ class MusicPlayer {
       {
         title: "Teruntuk Mia",
         artist: "Nuh..",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Music/Nuh.. - Teruntuk Mia.mp3",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Nuh.. - Teruntuk Mia.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/nuh.png",
       },
@@ -144,7 +144,7 @@ class MusicPlayer {
       {
         title: "Dan",
         artist: "Sheila On 7",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sheila On 7 - Dan.mp3",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sheila on 7 - Dan.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/sheila.jpg",
       },
