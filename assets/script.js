@@ -242,6 +242,10 @@ class MusicPlayer {
     this.dataArray = null;
     this.source = null;
     this.animationId = null;
+    this.preloadedAudios = {};
+    this.preloadQueue = [];
+    this.currentlyPreloading = 0;
+    this.maxParallelPreloads = 3;
 
     this.playBtn = document.getElementById("playBtn");
     this.prevBtn = document.getElementById("prevBtn");
@@ -260,6 +264,9 @@ class MusicPlayer {
     this.playlist = document.getElementById("playlist");
     this.playlistTrigger = document.getElementById("playlistTrigger");
     this.visualizer = document.getElementById("visualizer");
+    this.audioPreloadContainer = document.getElementById(
+      "audioPreloadContainer"
+    );
     this.body = document.body;
 
     this.backgroundImages = [
@@ -292,6 +299,62 @@ class MusicPlayer {
     this.generateShuffledIndices();
     this.updateBackground(false);
     this.startBackgroundRotation();
+    this.startPreloading();
+  }
+
+  startPreloading() {
+    const initialPreloadCount = Math.min(5, this.songs.length);
+    for (let i = 0; i < initialPreloadCount; i++) {
+      this.preloadAudio(i);
+    }
+
+    for (let i = initialPreloadCount; i < this.songs.length; i++) {
+      this.preloadQueue.push(i);
+    }
+
+    this.processPreloadQueue();
+  }
+
+  processPreloadQueue() {
+    while (
+      this.preloadQueue.length > 0 &&
+      this.currentlyPreloading < this.maxParallelPreloads
+    ) {
+      const index = this.preloadQueue.shift();
+      this.preloadAudio(index);
+    }
+  }
+
+  preloadAudio(index) {
+    if (this.preloadedAudios[index]) return;
+
+    this.currentlyPreloading++;
+    const song = this.songs[index];
+    const audio = document.createElement("audio");
+    audio.preload = "auto";
+    audio.src = song.src;
+    audio.crossOrigin = "anonymous";
+
+    audio.oncanplaythrough = () => {
+      this.preloadedAudios[index] = audio;
+      this.currentlyPreloading--;
+      this.processPreloadQueue();
+
+      const playlistItem = this.playlistContainer.querySelector(
+        `.playlist-item[data-index="${index}"]`
+      );
+      if (playlistItem) {
+        playlistItem.classList.add("preloaded");
+      }
+    };
+
+    audio.onerror = () => {
+      console.error(`Failed to preload song: ${song.title}`);
+      this.currentlyPreloading--;
+      this.processPreloadQueue();
+    };
+
+    this.audioPreloadContainer.appendChild(audio);
   }
 
   setupVisualizer() {
@@ -588,9 +651,16 @@ class MusicPlayer {
     }
 
     const song = this.songs[this.currentSongIndex];
-    this.audioPlayer.src = song.src;
-    this.updateSongDisplay();
 
+    if (this.preloadedAudios[index]) {
+      this.audioPlayer.src = song.src;
+      this.audioPlayer.currentTime = 0;
+    } else {
+      this.audioPlayer.src = song.src;
+      this.preloadAudio(index);
+    }
+
+    this.updateSongDisplay();
     this.updateBackground(true);
 
     if (this.audioContext && this.audioContext.state === "suspended") {
@@ -607,6 +677,22 @@ class MusicPlayer {
       } catch (error) {
         console.error("Error playing audio:", error);
       }
+    }
+
+    this.preloadAdjacentSongs(index);
+  }
+
+  preloadAdjacentSongs(currentIndex) {
+    const nextIndex =
+      currentIndex < this.songs.length - 1 ? currentIndex + 1 : 0;
+    if (!this.preloadedAudios[nextIndex]) {
+      this.preloadAudio(nextIndex);
+    }
+
+    const prevIndex =
+      currentIndex > 0 ? currentIndex - 1 : this.songs.length - 1;
+    if (!this.preloadedAudios[prevIndex]) {
+      this.preloadAudio(prevIndex);
     }
   }
 
