@@ -258,7 +258,6 @@ class MusicPlayer {
     this.durationEl = document.getElementById("duration");
     this.playlistContainer = document.getElementById("playlistContainer");
     this.playlist = document.getElementById("playlist");
-    this.burgerMenu = document.getElementById("burgerMenu");
     this.playlistTrigger = document.getElementById("playlistTrigger");
     this.visualizer = document.getElementById("visualizer");
     this.body = document.body;
@@ -493,9 +492,6 @@ class MusicPlayer {
         item.addEventListener("click", (e) => {
           const index = parseInt(e.currentTarget.dataset.index);
           this.selectSong(index);
-          if (window.innerWidth <= 768) {
-            this.togglePlaylist();
-          }
         });
       });
   }
@@ -691,54 +687,30 @@ class MusicPlayer {
     }
   }
 
-  handleProgressBarTouch(e) {
-    if (this.audioPlayer.duration) {
-      const rect = this.progressBar.getBoundingClientRect();
-      const clickX = e.touches[0].clientX - rect.left;
-      const width = rect.width;
-      const newTime = (clickX / width) * this.audioPlayer.duration;
-      this.audioPlayer.currentTime = newTime;
-      e.preventDefault();
-    }
-  }
-
-  togglePlaylist() {
-    this.playlistVisible = !this.playlistVisible;
-    this.playlist.classList.toggle("visible", this.playlistVisible);
-    this.body.classList.toggle("playlist-open", this.playlistVisible);
-
-    if (window.innerWidth <= 768) {
-      if (this.playlistVisible) {
-        const activeItem = this.playlistContainer.querySelector(
-          ".playlist-item.active"
-        );
-        if (activeItem) {
-          activeItem.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
-        }
-      }
-    }
-  }
-
-  showPlaylist() {
-    this.playlistVisible = true;
-    this.playlist.classList.add("visible");
-    this.body.classList.add("playlist-open");
-    this.burgerMenu.classList.add("hidden");
-  }
-
-  hidePlaylist() {
-    if (!this.playlistHovered && !this.triggerHovered) {
-      this.playlistVisible = false;
-      this.playlist.classList.remove("visible");
-      this.body.classList.remove("playlist-open");
-      this.burgerMenu.classList.remove("hidden");
-    }
-  }
-
   setupEventListeners() {
+    this.playlistTrigger.addEventListener("mouseenter", () => {
+      this.playlistVisible = true;
+      this.playlistHovered = true;
+    });
+
+    this.playlistTrigger.addEventListener("mouseleave", () => {
+      this.playlistHovered = false;
+      setTimeout(() => {
+        if (!this.playlistHovered) {
+          this.playlistVisible = false;
+        }
+      }, 300);
+    });
+
+    this.playlist.addEventListener("mouseenter", () => {
+      this.playlistHovered = true;
+    });
+
+    this.playlist.addEventListener("mouseleave", () => {
+      this.playlistHovered = false;
+      this.playlistVisible = false;
+    });
+
     this.playBtn.addEventListener("click", () => this.togglePlay());
     this.prevBtn.addEventListener("click", () => this.prevSong());
 
@@ -757,55 +729,6 @@ class MusicPlayer {
         const newTime = (clickX / width) * this.audioPlayer.duration;
         this.audioPlayer.currentTime = newTime;
       }
-    });
-
-    this.progressBar.addEventListener("touchstart", (e) => {
-      this.handleProgressBarTouch(e);
-    });
-
-    this.progressBar.addEventListener("touchmove", (e) => {
-      this.handleProgressBarTouch(e);
-    });
-
-    let touchStartX = 0;
-    const playerContainer = document.querySelector(".music-player");
-
-    playerContainer.addEventListener("touchstart", (e) => {
-      touchStartX = e.touches[0].clientX;
-    });
-
-    playerContainer.addEventListener("touchend", (e) => {
-      const touchEndX = e.changedTouches[0].clientX;
-      const diffX = touchStartX - touchEndX;
-
-      if (Math.abs(diffX) > 50) {
-        if (diffX > 0) {
-          this.nextSong();
-        } else {
-          this.prevSong();
-        }
-      }
-    });
-
-    this.burgerMenu.addEventListener("click", () => this.togglePlaylist());
-
-    this.playlistTrigger.addEventListener("mouseenter", () => {
-      this.triggerHovered = true;
-      this.showPlaylist();
-    });
-
-    this.playlistTrigger.addEventListener("mouseleave", () => {
-      this.triggerHovered = false;
-      setTimeout(() => this.hidePlaylist(), 100);
-    });
-
-    this.playlist.addEventListener("mouseenter", () => {
-      this.playlistHovered = true;
-    });
-
-    this.playlist.addEventListener("mouseleave", () => {
-      this.playlistHovered = false;
-      setTimeout(() => this.hidePlaylist(), 100);
     });
 
     document.addEventListener("keydown", (e) => {
