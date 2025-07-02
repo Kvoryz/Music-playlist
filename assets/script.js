@@ -705,6 +705,11 @@ class MusicPlayer {
 
     if (!song.lyrics || song.lyrics.length === 0) return;
 
+    const allLyrics = this.lyricsContent.querySelectorAll(".lyrics-line");
+    allLyrics.forEach((lyric) => {
+      lyric.classList.remove("active", "active-prev", "active-next");
+    });
+
     let activeIndex = -1;
     for (let i = 0; i < song.lyrics.length; i++) {
       if (song.lyrics[i].time <= currentTime) {
@@ -714,26 +719,36 @@ class MusicPlayer {
       }
     }
 
-    if (activeIndex !== this.currentLyricIndex) {
-      const allLyrics = this.lyricsContent.querySelectorAll(".lyrics-line");
-      allLyrics.forEach((lyric) => lyric.classList.remove("active"));
+    if (activeIndex >= 0) {
+      const currentLyric = this.lyricsContent.querySelector(
+        `.lyrics-line[data-index="${activeIndex}"]`
+      );
 
-      if (activeIndex >= 0) {
-        const currentLyric = this.lyricsContent.querySelector(
-          `.lyrics-line[data-index="${activeIndex}"]`
-        );
-        if (currentLyric) {
-          currentLyric.classList.add("active");
+      if (currentLyric) {
+        currentLyric.classList.add("active");
 
-          currentLyric.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-          });
+        if (activeIndex > 0) {
+          const prevLyric = this.lyricsContent.querySelector(
+            `.lyrics-line[data-index="${activeIndex - 1}"]`
+          );
+          prevLyric?.classList.add("active-prev");
         }
-      }
 
-      this.currentLyricIndex = activeIndex;
+        if (activeIndex < song.lyrics.length - 1) {
+          const nextLyric = this.lyricsContent.querySelector(
+            `.lyrics-line[data-index="${activeIndex + 1}"]`
+          );
+          nextLyric?.classList.add("active-next");
+        }
+
+        currentLyric.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }
     }
+
+    this.currentLyricIndex = activeIndex;
   }
 
   toggleLyrics() {

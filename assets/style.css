@@ -480,21 +480,29 @@ body {
 
 .lyrics-line {
   margin: 10px 0;
-  opacity: 0.6;
-  transition: all 0.3s ease;
+  color: white;
+  transition: all 0.4s ease;
   padding: 5px 10px;
   border-radius: 5px;
   line-height: 1.5;
-  min-height: 24px;
-  scroll-margin: 50vh;
+  filter: blur(2px);
+  opacity: 0.7;
 }
 
 .lyrics-line.active {
+  filter: blur(0);
   opacity: 1;
   font-weight: 700;
   font-size: 1.1rem;
   color: #1ed760;
   background: rgba(30, 215, 96, 0.1);
+  transform: scale(1.05);
+}
+
+.lyrics-line.active-prev,
+.lyrics-line.active-next {
+  filter: blur(1px);
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {
