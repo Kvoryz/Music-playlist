@@ -259,7 +259,7 @@ body {
   right: 0;
   top: 0;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(10px);
   border-radius: 10px 0 0 10px;
   padding: 20px;
@@ -518,12 +518,17 @@ body {
 .lyrics-line {
   margin: 12px 0;
   color: rgba(255, 255, 255, 0.5);
-  transition: all 0.4s ease;
+  transition: color 0.4s ease, background-color 0.4s ease,
+    transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
   padding: 10px 15px;
   border-radius: 5px;
   line-height: 1.6;
   word-break: break-word;
   transform-origin: center;
+  white-space: pre-line;
+  will-change: transform, color, background-color;
+  backface-visibility: hidden;
+  contain: content;
 }
 
 .lyrics-line.active {
@@ -531,7 +536,8 @@ body {
   font-weight: 700;
   font-size: 1.1rem;
   background: rgba(30, 215, 96, 0.1);
-  transform: scale(1.03);
+  transform: scale(1.03) translateZ(0);
+  text-shadow: 0 0 1px rgba(30, 215, 96, 0.3);
 }
 
 .lyrics-box {

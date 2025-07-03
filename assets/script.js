@@ -30,23 +30,23 @@ class MusicPlayer {
             text: "You leapt from crumbling bridges, watching cityscapes turn to dust",
           },
           {
-            time: 45,
+            time: 44,
             text: "Filming helicopters crashing in the ocean from way above",
           },
           {
-            time: 56,
+            time: 55,
             text: "Got the music in you, baby, tell me why",
           },
           {
-            time: 61,
+            time: 60,
             text: "Got the music in you, baby, tell me why",
           },
           {
-            time: 66,
+            time: 65,
             text: "You've been locked in here forever, and you just can't say goodbye",
           },
           {
-            time: 77,
+            time: 76,
             text: "Kisses on the foreheads of the lovers wrapped in your arms",
           },
           {
@@ -54,11 +54,11 @@ class MusicPlayer {
             text: "You've been hiding them in hollowed-out pianos left in the dark",
           },
           {
-            time: 97,
+            time: 96,
             text: "Got the music in you, baby, tell me why",
           },
           {
-            time: 102,
+            time: 101,
             text: "Got the music in you, baby, tell me why",
           },
           {
@@ -74,7 +74,7 @@ class MusicPlayer {
             text: "Apocalypse",
           },
           {
-            time: 129,
+            time: 128,
             text: "Your lips, my lips",
           },
           {
@@ -90,7 +90,7 @@ class MusicPlayer {
             text: "Flood is rising up on your knees",
           },
           {
-            time: 145,
+            time: 144,
             text: "Oh, please",
           },
           {
@@ -102,7 +102,7 @@ class MusicPlayer {
             text: "Come out and haunt me",
           },
           {
-            time: 158,
+            time: 157,
             text: "Sharing all your secrets with each other, since you were kids",
           },
           {
@@ -110,15 +110,15 @@ class MusicPlayer {
             text: "Sleeping soundly with the locket that she gave you clutched in your fist",
           },
           {
-            time: 178,
+            time: 177,
             text: "Got the music in you, baby, tell me why",
           },
           {
-            time: 183,
+            time: 182,
             text: "Got the music in you, baby, tell me why",
           },
           {
-            time: 188,
+            time: 187,
             text: "You've been locked in here forever, and you just can't say goodbye",
           },
           {
@@ -126,7 +126,7 @@ class MusicPlayer {
             text: "♪",
           },
           {
-            time: 208,
+            time: 207,
             text: "You've been locked in here forever, and you just can't say goodbye",
           },
           {
@@ -134,7 +134,7 @@ class MusicPlayer {
             text: "♪",
           },
           {
-            time: 238,
+            time: 237,
             text: "Oh, when you're all alone",
           },
           {
