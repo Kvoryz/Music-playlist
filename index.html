@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>Music Player</title>
+    <title>Harmony</title>
     <link rel="icon" href="image/clover.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,6 +26,22 @@
     <link rel="stylesheet" href="assets/style.css" />
   </head>
   <body>
+    <div class="welcome-overlay">
+      <div class="welcome-container">
+        <div class="album-art-pulse">
+          <div class="vinyl-disc"></div>
+        </div>
+        <h2 class="welcome-title">Harmony</h2>
+        <p class="welcome-subtitle">Ready to play your favorite tunes</p>
+        <div class="wave-loader">
+          <div class="wave"></div>
+          <div class="wave"></div>
+          <div class="wave"></div>
+        </div>
+      </div>
+      <audio id="welcomeSound" src="assets/audio/interface sfx.mp3"></audio>
+    </div>
+
     <div class="background-blur" id="backgroundBlur"></div>
     <div class="overlay"></div>
 

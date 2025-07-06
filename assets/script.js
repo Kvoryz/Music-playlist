@@ -1600,7 +1600,6 @@ class MusicPlayer {
         });
       });
   }
-
   destroy() {
     if (this.backgroundChangeInterval) {
       clearInterval(this.backgroundChangeInterval);
@@ -1618,4 +1617,36 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("beforeunload", () => {
     player.destroy();
   });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const welcome = document.querySelector(".welcome-overlay");
+  const welcomeSound = document.getElementById("welcomeSound");
+
+  const playWelcomeSound = () => {
+    welcomeSound.volume = 0.3;
+    welcomeSound.play().catch((e) => console.log("Autoplay prevented:", e));
+  };
+
+  const hideWelcome = () => {
+    welcome.classList.add("fade-out");
+    setTimeout(() => welcome.remove(), 800);
+  };
+
+  playWelcomeSound();
+  const minDisplayTime = 1500;
+  const startTime = Date.now();
+
+  const checkLoad = () => {
+    const elapsed = Date.now() - startTime;
+    if (elapsed >= minDisplayTime && document.readyState === "complete") {
+      hideWelcome();
+    } else if (elapsed >= 3000) {
+      hideWelcome();
+    } else {
+      requestAnimationFrame(checkLoad);
+    }
+  };
+
+  checkLoad();
 });
