@@ -1633,20 +1633,24 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => welcome.remove(), 800);
   };
 
-  playWelcomeSound();
-  const minDisplayTime = 1500;
-  const startTime = Date.now();
+  if (window.innerWidth > 768) {
+    playWelcomeSound();
+    const minDisplayTime = 1500;
+    const startTime = Date.now();
 
-  const checkLoad = () => {
-    const elapsed = Date.now() - startTime;
-    if (elapsed >= minDisplayTime && document.readyState === "complete") {
-      hideWelcome();
-    } else if (elapsed >= 3000) {
-      hideWelcome();
-    } else {
-      requestAnimationFrame(checkLoad);
-    }
-  };
+    const checkLoad = () => {
+      const elapsed = Date.now() - startTime;
+      if (elapsed >= minDisplayTime && document.readyState === "complete") {
+        hideWelcome();
+      } else if (elapsed >= 3000) {
+        hideWelcome();
+      } else {
+        requestAnimationFrame(checkLoad);
+      }
+    };
 
-  checkLoad();
+    checkLoad();
+  } else {
+    welcome.remove();
+  }
 });
