@@ -7,12 +7,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Arctic Monkeys - I Wanna Be Yours (Instrumental).mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/am.png",
-        lyrics: [
-          {
-            time: 2,
-            text: "♪",
-          },
-        ],
+        lyricsKey: "i_wanna_be_yours_instrumental",
       },
       {
         title: "Apocalypse",
@@ -20,140 +15,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/CAS - Apocalypse.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/cas.jpeg",
-        lyrics: [
-          {
-            time: 2,
-            text: "♪",
-          },
-          {
-            time: 35,
-            text: "You leapt from crumbling bridges, watching cityscapes turn to dust",
-          },
-          {
-            time: 44,
-            text: "Filming helicopters crashing in the ocean from way above",
-          },
-          {
-            time: 55,
-            text: "Got the music in you, baby, tell me why",
-          },
-          {
-            time: 60,
-            text: "Got the music in you, baby, tell me why",
-          },
-          {
-            time: 65,
-            text: "You've been locked in here forever, and you just can't say goodbye",
-          },
-          {
-            time: 76,
-            text: "Kisses on the foreheads of the lovers wrapped in your arms",
-          },
-          {
-            time: 86,
-            text: "You've been hiding them in hollowed-out pianos left in the dark",
-          },
-          {
-            time: 96,
-            text: "Got the music in you, baby, tell me why",
-          },
-          {
-            time: 101,
-            text: "Got the music in you, baby, tell me why",
-          },
-          {
-            time: 107,
-            text: "You've been locked in here forever, and you just can't say goodbye",
-          },
-          {
-            time: 119,
-            text: "Your lips, my lips",
-          },
-          {
-            time: 121,
-            text: "Apocalypse",
-          },
-          {
-            time: 128,
-            text: "Your lips, my lips",
-          },
-          {
-            time: 131,
-            text: "Apocalypse",
-          },
-          {
-            time: 137,
-            text: "Go and sneak us through the rivers",
-          },
-          {
-            time: 140,
-            text: "Flood is rising up on your knees",
-          },
-          {
-            time: 144,
-            text: "Oh, please",
-          },
-          {
-            time: 148,
-            text: "Come out and haunt me, I know you want me",
-          },
-          {
-            time: 153,
-            text: "Come out and haunt me",
-          },
-          {
-            time: 157,
-            text: "Sharing all your secrets with each other, since you were kids",
-          },
-          {
-            time: 167,
-            text: "Sleeping soundly with the locket that she gave you clutched in your fist",
-          },
-          {
-            time: 177,
-            text: "Got the music in you, baby, tell me why",
-          },
-          {
-            time: 182,
-            text: "Got the music in you, baby, tell me why",
-          },
-          {
-            time: 187,
-            text: "You've been locked in here forever, and you just can't say goodbye",
-          },
-          {
-            time: 195,
-            text: "♪",
-          },
-          {
-            time: 207,
-            text: "You've been locked in here forever, and you just can't say goodbye",
-          },
-          {
-            time: 215,
-            text: "♪",
-          },
-          {
-            time: 237,
-            text: "Oh, when you're all alone",
-          },
-          {
-            time: 245,
-            text: "I will reach for you",
-          },
-          {
-            time: 250,
-            text: "When you're feeling low",
-          },
-          {
-            time: 255,
-            text: "I will be there too",
-          },
-          {
-            time: 261,
-            text: "♪",
-          },
-        ],
+        lyricsKey: "apocalypse",
       },
       {
         title: "Cry",
@@ -161,7 +23,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/CAS - Cry.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/cas.jpeg",
-        lyrics: [],
+        lyricsKey: "cry",
       },
       {
         title: "K.",
@@ -169,7 +31,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/CAS - K..mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/cas.jpeg",
-        lyrics: [],
+        lyricsKey: "k",
       },
       {
         title: "Sunsetz",
@@ -177,7 +39,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/CAS - Sunsetz.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/cas.jpeg",
-        lyrics: [],
+        lyricsKey: "suneet",
       },
       {
         title: "Chezile",
@@ -185,7 +47,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Chezile - Beanie.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/chezile.jpeg",
-        lyrics: [],
+        lyricsKey: "chezile",
       },
       {
         title: "Yellow",
@@ -193,7 +55,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Coldplay - Yellow.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/cold.jpeg",
-        lyrics: [],
+        lyricsKey: "yellow",
       },
       {
         title: "Trouble",
@@ -201,7 +63,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Coldplay - Trouble.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/cold.jpeg",
-        lyrics: [],
+        lyricsKey: "trouble",
       },
       {
         title: "Welcome And Goodbye",
@@ -209,72 +71,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Dream, ivory - Welcome and Goodbye.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/dream.jpeg",
-        lyrics: [
-          {
-            time: 2,
-            text: "♪",
-          },
-          {
-            time: 43,
-            text: "Through it all once again",
-          },
-          {
-            time: 46,
-            text: "Came to know my only friend",
-          },
-          {
-            time: 49,
-            text: "Lost control",
-          },
-          {
-            time: 56,
-            text: "Can't begin, I seek within",
-          },
-          {
-            time: 59,
-            text: "To feel the warmth brought within your skin",
-          },
-          {
-            time: 63,
-            text: "Did you know?",
-          },
-          {
-            time: 69,
-            text: "For how it seemed",
-          },
-          {
-            time: 74,
-            text: "I should've stayed and let you be",
-          },
-          {
-            time: 81,
-            text: "Run into my heart so carelessly",
-          },
-          {
-            time: 88,
-            text: "That's the reason I'm afraid",
-          },
-          {
-            time: 91,
-            text: "You're the thoughts that can't be tamed",
-          },
-          {
-            time: 95,
-            text: "And I'm trying to be sane",
-          },
-          {
-            time: 102,
-            text: "And I'm trying to be sane",
-          },
-          {
-            time: 108,
-            text: "And I'm trying to be sane",
-          },
-          {
-            time: 111,
-            text: "♪",
-          },
-        ],
+        lyricsKey: "welcome_and_goodbye",
       },
       {
         title: "Walking Back Home",
@@ -282,7 +79,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/FUR - Walking Back Home.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/fur.jpeg",
-        lyrics: [],
+        lyricsKey: "walking_back_home",
       },
       {
         title: "Nina",
@@ -290,7 +87,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Feast - Nina.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/feast.jpeg",
-        lyrics: [],
+        lyricsKey: "nina",
       },
       {
         title: "o,Tuan",
@@ -298,7 +95,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Feast - o,Tuan.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/feast.jpeg",
-        lyrics: [],
+        lyricsKey: "otuan",
       },
       {
         title: "Iris",
@@ -306,7 +103,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Goo Goo Dolls - Iris.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/goo.jpg",
-        lyrics: [],
+        lyricsKey: "iris",
       },
       {
         title: "Tip Toe",
@@ -314,7 +111,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/HYBS - Tip Toe.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/hybs.jpeg",
-        lyrics: [],
+        lyricsKey: "tip_toe",
       },
       {
         title: "Drunk text",
@@ -322,7 +119,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Henry Moodie - Drunk text.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/henry.jpeg",
-        lyrics: [],
+        lyricsKey: "drunk_text",
       },
       {
         title: "Car's Outside",
@@ -330,7 +127,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/James Arthur - Car's Outside.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/james.jpeg",
-        lyrics: [],
+        lyricsKey: "cars_outside",
       },
       {
         title: "Chamber Of Reflection",
@@ -338,7 +135,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Mac DeMarco - Chamber Of Reflection.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/mac.jpg",
-        lyrics: [],
+        lyricsKey: "chamber_of_reflection",
       },
       {
         title: "Moonlight On The River",
@@ -346,7 +143,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Mac DeMarco - Moonlight On The River.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/mac.jpg",
-        lyrics: [],
+        lyricsKey: "moonlight_on_the_river",
       },
       {
         title: "Teruntuk Mia",
@@ -354,7 +151,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Nuh.. - Teruntuk Mia.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/nuh.png",
-        lyrics: [],
+        lyricsKey: "teruntuk_mia",
       },
       {
         title: "Let Down",
@@ -362,7 +159,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/RadioHead - Let Down.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/radio.jpeg",
-        lyrics: [],
+        lyricsKey: "let_down",
       },
       {
         title: "Sebuah Kisah Klasik",
@@ -370,7 +167,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sheila On 7 - Sebuah Kisah Klasik.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/sheila.jpg",
-        lyrics: [],
+        lyricsKey: "sebuah_kisah_klasik",
       },
       {
         title: "Dan",
@@ -378,7 +175,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sheila on 7 - Dan.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/sheila.jpg",
-        lyrics: [],
+        lyricsKey: "dan",
       },
       {
         title: "Film Favorit",
@@ -386,7 +183,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sheila on 7 - Film Favorit.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/sheila.jpg",
-        lyrics: [],
+        lyricsKey: "film_favorit",
       },
       {
         title: "Back to friends",
@@ -394,7 +191,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sombr - Back to friends.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/sombr.jpeg",
-        lyrics: [],
+        lyricsKey: "back_to_friends",
       },
       {
         title: "Bad Habit",
@@ -402,7 +199,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Steve Lacy - Bad Habit.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/steve.jpg",
-        lyrics: [],
+        lyricsKey: "bad_habit",
       },
       {
         title: "Vacations",
@@ -410,100 +207,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Telephones - Vacations.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/tele.png",
-        lyrics: [
-          {
-            time: 2,
-            text: "♪",
-          },
-          {
-            time: 24,
-            text: "Rise with the morning",
-          },
-          {
-            time: 30,
-            text: "You call to me",
-          },
-          {
-            time: 37,
-            text: "My thoughts are crawling",
-          },
-          {
-            time: 42,
-            text: "You're all I see",
-          },
-          {
-            time: 47,
-            text: "I wish I could live without you",
-          },
-          {
-            time: 53,
-            text: "But you're a part of me",
-          },
-          {
-            time: 59,
-            text: "Wherever I go",
-          },
-          {
-            time: 62,
-            text: "You'll always be next to me",
-          },
-          {
-            time: 70,
-            text: "♪",
-          },
-          {
-            time: 101,
-            text: "Fall into the night",
-          },
-          {
-            time: 106,
-            text: "As I gaze into you",
-          },
-          {
-            time: 112,
-            text: "Shine so bright",
-          },
-          {
-            time: 118,
-            text: "It's all I do",
-          },
-          {
-            time: 123,
-            text: "I wish I could live without you",
-          },
-          {
-            time: 129,
-            text: "But you're a part of me",
-          },
-          {
-            time: 135,
-            text: "Wherever I go",
-          },
-          {
-            time: 138,
-            text: "You'll always be next to me",
-          },
-          {
-            time: 150,
-            text: "♪ You'll always be next to me",
-          },
-          {
-            time: 156,
-            text: "♪ You'll always be next to me",
-          },
-          {
-            time: 162,
-            text: "♪ You'll always be next to me",
-          },
-          {
-            time: 168,
-            text: "♪ You'll always be next to me",
-          },
-          {
-            time: 172,
-            text: "♪",
-          },
-        ],
+        lyricsKey: "vacations",
       },
       {
         title: "Bunga Maaf",
@@ -511,7 +215,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/The Lantis - Bunga Maaf.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/lantis.webp",
-        lyrics: [],
+        lyricsKey: "bunga_maaf",
       },
       {
         title: "Perayaan Mati Rasa",
@@ -519,7 +223,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Umay, Natania - Perayaan mati rasa.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/umay.png",
-        lyrics: [],
+        lyricsKey: "perayaan_mati_rasa",
       },
       {
         title: "Seasons",
@@ -527,7 +231,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Wave to earth - Seasons.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/wave.jpeg",
-        lyrics: [],
+        lyricsKey: "seasons",
       },
       {
         title: "Favorite Lesson",
@@ -535,7 +239,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Yaeow - Favorite lesson.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/yaeow.jpeg",
-        lyrics: [],
+        lyricsKey: "favorite_lesson",
       },
       {
         title: "Missin Something",
@@ -543,7 +247,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Zach Templar - Missin something.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/zach.jpeg",
-        lyrics: [],
+        lyricsKey: "missin_something",
       },
       {
         title: "Here With Me",
@@ -551,7 +255,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/d4vd - Here With Me.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/d4vd.jpeg",
-        lyrics: [],
+        lyricsKey: "here_with_me",
       },
       {
         title: "Romantic Homicide",
@@ -559,84 +263,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/d4vd - Romantic Homicide.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/d4vd.jpeg",
-        lyrics: [
-          {
-            time: 2,
-            text: "♪",
-          },
-          {
-            time: 16,
-            text: "I'm scared (oh-oh-oh)",
-          },
-          {
-            time: 21,
-            text: "It feels like you don't care (ooh-ooh)",
-          },
-          {
-            time: 29,
-            text: "Enlighten me, my dear (ooh-ooh-ooh)",
-          },
-          {
-            time: 36,
-            text: "Why am I still here? Mm (oh-oh)",
-          },
-          {
-            time: 43,
-            text: "I don't mean to be",
-          },
-          {
-            time: 45,
-            text: "Complacent with the decisions you made",
-          },
-          {
-            time: 51,
-            text: "But why? Mm",
-          },
-          {
-            time: 58,
-            text: "In the back of my mind, you died",
-          },
-          {
-            time: 65,
-            text: "And I didn't even cry",
-          },
-          {
-            time: 68,
-            text: "No, not a single tear",
-          },
-          {
-            time: 72,
-            text: "And I'm sick of waiting patiently",
-          },
-          {
-            time: 77,
-            text: "For someone that won't even arrive",
-          },
-          {
-            time: 89,
-            text: "♪ Ooh-ooh-ooh-ooh-ooh-oh",
-          },
-          {
-            time: 102,
-            text: "In the back of my mind, I killed you",
-          },
-          {
-            time: 109,
-            text: "And I didn't even regret it",
-          },
-          {
-            time: 113,
-            text: "I can't believe I said it",
-          },
-          {
-            time: 116,
-            text: "But it's true",
-          },
-          {
-            time: 124,
-            text: "I hate you",
-          },
-        ],
+        lyricsKey: "romantic_homicide",
       },
     ];
     this.currentSongIndex = 0;
@@ -1044,8 +671,10 @@ class MusicPlayer {
     this.lyricsContent.innerHTML = "";
     const song = this.songs[this.currentSongIndex];
 
-    if (song.lyrics && song.lyrics.length > 0) {
-      song.lyrics.forEach((line, index) => {
+    const lyrics = song.lyricsKey ? lyricsData[song.lyricsKey]?.lines : null;
+
+    if (lyrics && lyrics.length > 0) {
+      lyrics.forEach((line, index) => {
         const lyricLine = document.createElement("div");
         lyricLine.className = "lyrics-line";
         lyricLine.dataset.time = line.time;
@@ -1069,13 +698,15 @@ class MusicPlayer {
     const currentTime = this.audioPlayer.currentTime;
     const song = this.songs[this.currentSongIndex];
 
-    if (!song.lyrics || song.lyrics.length === 0) return;
+    const lyrics = song.lyricsKey ? lyricsData[song.lyricsKey]?.lines : null;
+
+    if (!lyrics || lyrics.length === 0) return;
 
     const allLyrics = this.lyricsContent.querySelectorAll(".lyrics-line");
 
     let activeIndex = -1;
-    for (let i = 0; i < song.lyrics.length; i++) {
-      if (song.lyrics[i].time <= currentTime) {
+    for (let i = 0; i < lyrics.length; i++) {
+      if (lyrics[i].time <= currentTime) {
         activeIndex = i;
       } else {
         break;
@@ -1096,7 +727,7 @@ class MusicPlayer {
         if (activeIndex > 0) {
           allLyrics[activeIndex - 1].classList.add("active-prev");
         }
-        if (activeIndex < song.lyrics.length - 1) {
+        if (activeIndex < lyrics.length - 1) {
           allLyrics[activeIndex + 1].classList.add("active-next");
         }
 
