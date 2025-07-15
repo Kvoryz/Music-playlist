@@ -267,7 +267,7 @@ class MusicPlayer {
       },
     ];
 
-    this.currentSongIndex = 0;
+    this.currentSongIndex = Math.floor(Math.random() * this.songs.length);
     this.isPlaying = false;
     this.isShuffled = false;
     this.isNextButtonPressed = false;
