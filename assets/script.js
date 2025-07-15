@@ -266,7 +266,6 @@ class MusicPlayer {
         lyricsKey: "romantic_homicide",
       },
     ];
-
     this.currentSongIndex = Math.floor(Math.random() * this.songs.length);
     this.isPlaying = false;
     this.isShuffled = false;
@@ -277,6 +276,12 @@ class MusicPlayer {
     this.repeatMode = 0;
     this.shuffledIndices = [];
     this.currentShuffleIndex = 0;
+    this.audioPlayer = document.getElementById("audioPlayer");
+    this.audioContext = null;
+    this.analyser = null;
+    this.dataArray = null;
+    this.source = null;
+    this.animationId = null;
     this.lyricsActive = false;
     this.currentLyricIndex = -1;
 
@@ -290,7 +295,6 @@ class MusicPlayer {
     this.preloadAttempts = {};
     this.preloadPriorities = [];
 
-    this.audioPlayer = document.getElementById("audioPlayer");
     this.playBtn = document.getElementById("playBtn");
     this.prevBtn = document.getElementById("prevBtn");
     this.nextBtn = document.getElementById("nextBtn");
@@ -302,6 +306,10 @@ class MusicPlayer {
     this.backgroundBlur = document.getElementById("backgroundBlur");
     this.progress = document.getElementById("progress");
     this.progressBar = document.getElementById("progressBar");
+    this.progressTooltip = document.createElement("div");
+    this.progressTooltip.className = "progress-tooltip";
+    this.progressContainer = document.querySelector(".progress-container");
+    this.progressContainer.appendChild(this.progressTooltip);
     this.currentTimeEl = document.getElementById("currentTime");
     this.durationEl = document.getElementById("duration");
     this.playlistContainer = document.getElementById("playlistContainer");
@@ -311,16 +319,12 @@ class MusicPlayer {
     this.audioPreloadContainer = document.getElementById(
       "audioPreloadContainer"
     );
+    this.body = document.body;
+    this.musicPlayer = document.getElementById("musicPlayer");
     this.lyricsContainer = document.getElementById("lyricsContainer");
     this.lyricsContent = document.getElementById("lyricsContent");
-    this.searchInput = document.getElementById("searchInput");
-    this.clearSearch = document.getElementById("clearSearch");
-
-    this.audioContext = null;
-    this.analyser = null;
-    this.dataArray = null;
-    this.source = null;
-    this.animationId = null;
+    this.closeLyrics = document.getElementById("closeLyrics");
+    this.lyricsBox = this.lyricsContainer.querySelector(".lyrics-box");
 
     this.backgroundImages = [
       "./image/background.jpg",
@@ -330,6 +334,7 @@ class MusicPlayer {
       "./image/background5.jpg",
     ];
     this.preloadedImages = [];
+    this.preloadBackgrounds();
     this.previousBackgroundIndex = -1;
     this.backgroundChangeInterval = null;
     this.backgroundTransitionDuration = 1000;
@@ -338,6 +343,8 @@ class MusicPlayer {
     this.playlistHovered = false;
     this.triggerHovered = false;
     this.playlistTransitioning = false;
+    this.searchInput = document.getElementById("searchInput");
+    this.clearSearch = document.getElementById("clearSearch");
     this.isSearching = false;
     this.searchResults = [];
     this.searchActive = false;
@@ -346,7 +353,7 @@ class MusicPlayer {
     this.init();
   }
 
-  init() {
+  async init() {
     this.setupVisualizer();
     this.setupEventListeners();
     this.setupAudioEvents();
@@ -354,6 +361,9 @@ class MusicPlayer {
     this.renderPlaylist();
     this.updateSongDisplay();
     this.generateShuffledIndices();
+    this.currentShuffleIndex = this.shuffledIndices.indexOf(
+      this.currentSongIndex
+    );
     this.updateBackground(false);
     this.startBackgroundRotation();
     this.startPreloading();
@@ -912,7 +922,7 @@ class MusicPlayer {
     }, 300);
   }
 
-  selectSong(index) {
+  async selectSong(index) {
     if (index < 0 || index >= this.songs.length) return;
 
     const wasPlaying = this.isPlaying;
@@ -1345,7 +1355,6 @@ class MusicPlayer {
     if (this.audioContext) {
       this.audioContext.close();
     }
-    this.clearPreloads();
   }
 }
 
