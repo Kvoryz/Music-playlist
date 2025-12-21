@@ -2,12 +2,20 @@ class MusicPlayer {
   constructor() {
     this.songs = [
       {
-        title: "I Wanna Be Yours (Instrumental)",
-        artist: "Arctic Monkeys",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Arctic Monkeys - I Wanna Be Yours (Instrumental).mp3",
+        title: "About You",
+        artist: "The 1975",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/The 1975 - About You.opus",
         albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/am.png",
-        lyricsKey: "i_wanna_be_yours_instrumental",
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/1975.jpg",
+        lyricsKey: "about_you",
+      },
+      {
+        title: "Let it Happen",
+        artist: "Tame Impala",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Tame Impala - Let It Happen.opus",
+        albumArt:
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/tame.jpeg",
+        lyricsKey: "let_it_happen",
       },
       {
         title: "Apocalypse",
@@ -39,7 +47,7 @@ class MusicPlayer {
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/CAS - Sunsetz.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/cas.jpeg",
-        lyricsKey: "suneet",
+        lyricsKey: "sunsetz",
       },
       {
         title: "Chezile",
@@ -82,22 +90,6 @@ class MusicPlayer {
         lyricsKey: "walking_back_home",
       },
       {
-        title: "Nina",
-        artist: "Feast",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Feast - Nina.mp3",
-        albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/feast.jpeg",
-        lyricsKey: "nina",
-      },
-      {
-        title: "o,Tuan",
-        artist: "Feast",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Feast - o,Tuan.mp3",
-        albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/feast.jpeg",
-        lyricsKey: "otuan",
-      },
-      {
         title: "Iris",
         artist: "Goo Goo Dolls",
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Goo Goo Dolls - Iris.mp3",
@@ -130,6 +122,22 @@ class MusicPlayer {
         lyricsKey: "cars_outside",
       },
       {
+        title: "Everything Goes On",
+        artist: "Porter Robinson",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Everything Goes On - Porter Robinson.opus",
+        albumArt:
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/porter.jpeg",
+        lyricsKey: "everything_goes_on",
+      },
+      {
+        title: "No Other Heart",
+        artist: "Mac DeMarco",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Mac DeMarco - No Other Heart.opus",
+        albumArt:
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/mac-heart.jpeg",
+        lyricsKey: "no_other_heart",
+      },
+      {
         title: "Chamber Of Reflection",
         artist: "Mac DeMarco",
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Mac DeMarco - Chamber Of Reflection.mp3",
@@ -146,12 +154,12 @@ class MusicPlayer {
         lyricsKey: "moonlight_on_the_river",
       },
       {
-        title: "Teruntuk Mia",
-        artist: "Nuh..",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Nuh.. - Teruntuk Mia.mp3",
+        title: "Exit Music",
+        artist: "RadioHead",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/RadioHead - Exit Music.opus",
         albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/nuh.png",
-        lyricsKey: "teruntuk_mia",
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/radio.jpeg",
+        lyricsKey: "exit_music",
       },
       {
         title: "Let Down",
@@ -162,28 +170,20 @@ class MusicPlayer {
         lyricsKey: "let_down",
       },
       {
-        title: "Sebuah Kisah Klasik",
-        artist: "Sheila On 7",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sheila On 7 - Sebuah Kisah Klasik.mp3",
+        title: "No Surprises",
+        artist: "RadioHead",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Radiohead - No Surprises.opus",
         albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/sheila.jpg",
-        lyricsKey: "sebuah_kisah_klasik",
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/radio.jpeg",
+        lyricsKey: "no_surprises",
       },
       {
-        title: "Dan",
-        artist: "Sheila On 7",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sheila on 7 - Dan.mp3",
+        title: "Creep",
+        artist: "RadioHead",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Radiohead - Creep.opus",
         albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/sheila.jpg",
-        lyricsKey: "dan",
-      },
-      {
-        title: "Film Favorit",
-        artist: "Sheila On 7",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Sheila on 7 - Film Favorit.mp3",
-        albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/sheila.jpg",
-        lyricsKey: "film_favorit",
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/radiohead-pablohoney.jpeg",
+        lyricsKey: "creep",
       },
       {
         title: "Back to friends",
@@ -210,28 +210,28 @@ class MusicPlayer {
         lyricsKey: "vacations",
       },
       {
-        title: "Bunga Maaf",
-        artist: "The Lantis",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/The Lantis - Bunga Maaf.mp3",
-        albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/lantis.webp",
-        lyricsKey: "bunga_maaf",
-      },
-      {
-        title: "Perayaan Mati Rasa",
-        artist: "Umay, Natania",
-        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Umay, Natania - Perayaan mati rasa.mp3",
-        albumArt:
-          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/umay.png",
-        lyricsKey: "perayaan_mati_rasa",
-      },
-      {
         title: "Seasons",
         artist: "Wave To Earth",
         src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/Wave to earth - Seasons.mp3",
         albumArt:
           "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/wave.jpeg",
         lyricsKey: "seasons",
+      },
+      {
+        title: "Bad",
+        artist: "Wave To Earth",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/wave to earth - bad.opus",
+        albumArt:
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/wave.jpeg",
+        lyricsKey: "bad",
+      },
+      {
+        title: "Love",
+        artist: "Wave To Earth",
+        src: "https://raw.githubusercontent.com/RiazRep/music-import/main/Music/wave to earth - love.opus",
+        albumArt:
+          "https://raw.githubusercontent.com/RiazRep/music-import/main/Album/wave.jpeg",
+        lyricsKey: "love",
       },
       {
         title: "Favorite Lesson",
@@ -358,6 +358,7 @@ class MusicPlayer {
     this.setupEventListeners();
     this.setupAudioEvents();
     this.setupSearch();
+    this.setupCursorHide();
     this.renderPlaylist();
     this.updateSongDisplay();
     this.generateShuffledIndices();
@@ -367,6 +368,19 @@ class MusicPlayer {
     this.updateBackground(false);
     this.startBackgroundRotation();
     this.startPreloading();
+  }
+
+  setupCursorHide() {
+    let cursorTimeout;
+
+    document.addEventListener("mousemove", () => {
+      document.body.style.cursor = "auto";
+      clearTimeout(cursorTimeout);
+
+      cursorTimeout = setTimeout(() => {
+        document.body.style.cursor = "none";
+      }, 5000);
+    });
   }
 
   startPreloading() {
@@ -593,6 +607,15 @@ class MusicPlayer {
     }
   }
 
+  // Update background with album art blur
+  updateAlbumBackground(albumArtUrl) {
+    this.backgroundBlur.style.transition =
+      "background-image 1s ease-in-out, opacity 1s ease-in-out";
+    this.backgroundBlur.style.backgroundImage = `url('${albumArtUrl}')`;
+    this.backgroundBlur.style.backgroundSize = "cover";
+    this.backgroundBlur.style.backgroundPosition = "center";
+  }
+
   setupAudioAnalysis() {
     if (!this.audioContext) {
       this.audioContext = new (window.AudioContext ||
@@ -669,9 +692,15 @@ class MusicPlayer {
         this.shuffledIndices[i],
       ];
     }
-    this.currentShuffleIndex = this.shuffledIndices.indexOf(
-      this.currentSongIndex
-    );
+
+    // Move current song to the first position
+    const currentPos = this.shuffledIndices.indexOf(this.currentSongIndex);
+    if (currentPos > 0) {
+      this.shuffledIndices.splice(currentPos, 1);
+      this.shuffledIndices.unshift(this.currentSongIndex);
+    }
+
+    this.currentShuffleIndex = 0;
   }
 
   toggleShuffle() {
@@ -688,6 +717,9 @@ class MusicPlayer {
     if (this.isShuffled) {
       this.generateShuffledIndices();
     }
+
+    // Re-render playlist to show shuffled/normal order
+    this.renderPlaylist();
   }
 
   toggleRepeat() {
@@ -720,12 +752,18 @@ class MusicPlayer {
   }
 
   renderPlaylist() {
-    const playlistHTML = this.songs
-      .map((song, index) => {
+    // Use shuffled order if shuffle is active, otherwise use normal order
+    const displayOrder = this.isShuffled
+      ? this.shuffledIndices
+      : [...Array(this.songs.length).keys()];
+
+    const playlistHTML = displayOrder
+      .map((songIndex) => {
+        const song = this.songs[songIndex];
         return `
                       <div class="playlist-item ${
-                        index === this.currentSongIndex ? "active" : ""
-                      }" data-index="${index}">
+                        songIndex === this.currentSongIndex ? "active" : ""
+                      }" data-index="${songIndex}">
                         <div class="album-art-small" style="background-image: url('${
                           song.albumArt
                         }')"></div>
@@ -770,49 +808,220 @@ class MusicPlayer {
     this.albumArt.style.backgroundPosition = "center";
     this.albumArt.textContent = "";
 
+    // Update background with album art
+    this.updateAlbumBackground(song.albumArt);
+
     this.durationEl.textContent = "--:--";
 
     this.playlistContainer
       .querySelectorAll(".playlist-item")
-      .forEach((item, index) => {
-        item.classList.toggle("active", index === this.currentSongIndex);
+      .forEach((item) => {
+        const songIndex = parseInt(item.dataset.index);
+        item.classList.toggle("active", songIndex === this.currentSongIndex);
       });
 
     this.updateLyricsDisplay();
   }
 
-  updateLyricsDisplay() {
+  async updateLyricsDisplay() {
+    // Hide lyrics content during loading to prevent flash
+    this.lyricsContent.style.opacity = "0";
     this.lyricsContent.innerHTML = "";
     const song = this.songs[this.currentSongIndex];
 
-    const lyrics = song.lyricsKey ? lyricsData[song.lyricsKey]?.lines : null;
+    // Show loading indicator
+    const loadingEl = document.createElement("div");
+    loadingEl.className = "no-lyrics-message";
+    loadingEl.textContent = "Loading lyrics...";
+    this.lyricsContent.appendChild(loadingEl);
+
+    // Try to get lyrics from LRC file first, then fall back to lyricsData
+    let lyrics = null;
+    if (song.lyricsKey && typeof lrcLoader !== "undefined") {
+      lyrics = await lrcLoader.getLyrics(song.lyricsKey);
+    } else if (song.lyricsKey && typeof lyricsData !== "undefined") {
+      lyrics = lyricsData[song.lyricsKey]?.lines;
+    }
+
+    // Store current lyrics for updateActiveLyric to use
+    this.currentLyrics = lyrics;
+
+    // Clear loading indicator
+    this.lyricsContent.innerHTML = "";
 
     if (lyrics && lyrics.length > 0) {
       lyrics.forEach((line, index) => {
         const lyricLine = document.createElement("div");
-        lyricLine.className = "lyrics-line";
+        // Add hidden-lyric class by default so lyrics are hidden on initial load
+        lyricLine.className = "lyrics-line hidden-lyric";
+
+        // Add special class for animated dots (instrumental parts)
+        if (line.text === "•••") {
+          lyricLine.classList.add("dots-placeholder");
+          // Create individual dot elements for wave animation
+          lyricLine.innerHTML =
+            '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+        } else {
+          lyricLine.textContent = line.text;
+        }
+
         lyricLine.dataset.time = line.time;
         lyricLine.dataset.index = index;
-        lyricLine.textContent = line.text;
+
+        // Add click handler to seek to this lyric's time
+        lyricLine.addEventListener("click", () => {
+          const seekTime = parseFloat(lyricLine.dataset.time);
+          if (!isNaN(seekTime)) {
+            // Set flags to prevent scroll event from triggering
+            this.isClickingLyric = true;
+            this.isAutoScrolling = true;
+            this.lyricsBox.classList.remove("user-scrolling");
+
+            this.audioPlayer.currentTime = seekTime;
+            // Force update active lyric
+            this.currentLyricIndex = -1;
+            this.updateActiveLyric();
+
+            // Clear flags after animation
+            setTimeout(() => {
+              this.isClickingLyric = false;
+              this.isAutoScrolling = false;
+            }, 1000);
+          }
+        });
+
         this.lyricsContent.appendChild(lyricLine);
       });
     } else {
       const noLyrics = document.createElement("div");
-      noLyrics.className = "lyrics-line";
+      noLyrics.className = "no-lyrics-message";
       noLyrics.textContent = "No lyrics available for this song";
       this.lyricsContent.appendChild(noLyrics);
     }
 
     this.currentLyricIndex = -1;
+
+    // Set flag to indicate song is changing (to prevent scroll events)
+    this.isChangingSong = true;
+
+    // Reset scroll position and remove user-scrolling class
+    if (this.lyricsBox) {
+      this.isAutoScrolling = true;
+      this.lyricsBox.classList.remove("user-scrolling");
+      this.lyricsBox.scrollTop = 0;
+    }
+
+    // Ensure is-playing class is present if music is playing
+    if (this.isPlaying) {
+      document.body.classList.add("is-playing");
+    }
+
+    // Immediately update lyrics visibility if lyrics panel is active
+    if (this.lyricsActive) {
+      setTimeout(() => {
+        this.currentLyricIndex = -1; // Reset to force update
+        this.updateActiveLyric();
+        // Show lyrics content after update
+        this.lyricsContent.style.opacity = "1";
+        // Clear flag after lyrics are updated
+        setTimeout(() => {
+          this.isChangingSong = false;
+          this.isAutoScrolling = false;
+        }, 800);
+      }, 150);
+    } else {
+      // Show lyrics content even if panel not active
+      this.lyricsContent.style.opacity = "1";
+      setTimeout(() => {
+        this.isChangingSong = false;
+        this.isAutoScrolling = false;
+      }, 800);
+    }
+
+    // Only setup scroll detection once (not every song change)
+    if (!this.lyricsScrollSetup) {
+      this.lyricsScrollSetup = true;
+      let scrollTimeout;
+      this.isAutoScrolling = false;
+
+      // Detect when tab/window becomes visible again to ignore scroll events
+      const setRecentlyVisible = () => {
+        this.recentlyBecameVisible = true;
+        setTimeout(() => {
+          this.recentlyBecameVisible = false;
+        }, 1000);
+      };
+
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          setRecentlyVisible();
+        }
+      });
+
+      window.addEventListener("focus", () => {
+        setRecentlyVisible();
+      });
+
+      this.lyricsBox.addEventListener(
+        "scroll",
+        () => {
+          // Ignore if this is auto-scroll, tab just became visible, song is changing, or clicking lyric
+          if (
+            this.isAutoScrolling ||
+            this.recentlyBecameVisible ||
+            this.isChangingSong ||
+            this.isClickingLyric
+          )
+            return;
+
+          // Add class to indicate user is scrolling
+          this.lyricsBox.classList.add("user-scrolling");
+
+          // Clear previous timeout
+          clearTimeout(scrollTimeout);
+
+          // Remove class and scroll back to active lyric after user stops scrolling
+          scrollTimeout = setTimeout(() => {
+            this.lyricsBox.classList.remove("user-scrolling");
+            // Auto-scroll back to active lyric after 3 seconds
+            this.scrollToActiveLyric();
+          }, 3000);
+        },
+        { passive: true }
+      );
+    }
+  }
+
+  scrollToActiveLyric() {
+    if (!this.lyricsBox || !this.lyricsActive) return;
+
+    const activeLyric = this.lyricsContent.querySelector(".lyrics-line.active");
+    if (activeLyric) {
+      this.isAutoScrolling = true;
+      const lyricsBox = this.lyricsBox;
+      const boxHeight = lyricsBox.clientHeight;
+      const lyricTop = activeLyric.offsetTop;
+      const lyricHeight = activeLyric.offsetHeight;
+      const scrollTo = lyricTop - boxHeight / 2 + lyricHeight / 2;
+
+      lyricsBox.scrollTo({
+        top: Math.max(0, scrollTo),
+        behavior: "smooth",
+      });
+
+      setTimeout(() => {
+        this.isAutoScrolling = false;
+      }, 500);
+    }
   }
 
   updateActiveLyric() {
     if (!this.lyricsActive) return;
 
     const currentTime = this.audioPlayer.currentTime;
-    const song = this.songs[this.currentSongIndex];
 
-    const lyrics = song.lyricsKey ? lyricsData[song.lyricsKey]?.lines : null;
+    // Use cached lyrics from updateLyricsDisplay
+    const lyrics = this.currentLyrics;
 
     if (!lyrics || lyrics.length === 0) return;
 
@@ -829,22 +1038,79 @@ class MusicPlayer {
 
     if (activeIndex === this.currentLyricIndex) return;
 
+    // Calculate max word count per line to determine visibility range
+    let maxWords = 0;
+    this.currentLyrics.forEach((line) => {
+      if (line.text && line.text !== "•••") {
+        const wordCount = line.text.split(/\s+/).length;
+        if (wordCount > maxWords) maxWords = wordCount;
+      }
+    });
+    // If any line has more than 10 words, use range of 2, otherwise 3
+    const visibleRange = maxWords > 10 ? 2 : 3;
+
+    // Remove all state classes from all lyrics first
     allLyrics.forEach((lyric) => {
-      lyric.classList.remove("active", "active-prev", "active-next");
+      lyric.classList.remove(
+        "active",
+        "active-prev",
+        "active-next",
+        "far-prev",
+        "far-next",
+        "very-far-prev",
+        "very-far-next"
+      );
+      // Add hidden-lyric by default, will be removed for visible lines
+      lyric.classList.add("hidden-lyric");
     });
 
     if (activeIndex >= 0) {
       const currentLyric = allLyrics[activeIndex];
       if (currentLyric) {
+        // Remove hidden and add active
+        currentLyric.classList.remove("hidden-lyric");
         currentLyric.classList.add("active");
 
-        if (activeIndex > 0) {
-          allLyrics[activeIndex - 1].classList.add("active-prev");
-        }
-        if (activeIndex < lyrics.length - 1) {
-          allLyrics[activeIndex + 1].classList.add("active-next");
+        // Force restart animation for dots-placeholder
+        if (currentLyric.classList.contains("dots-placeholder")) {
+          const dots = currentLyric.querySelectorAll(".dot");
+          dots.forEach((dot) => {
+            // Force reflow to restart animation
+            dot.style.animation = "none";
+            dot.offsetHeight; // Trigger reflow
+            dot.style.animation = "";
+          });
         }
 
+        // Add classes based on distance from active line
+        allLyrics.forEach((lyric, index) => {
+          const distance = index - activeIndex;
+
+          if (distance === 0) {
+            // Already handled above
+          } else if (distance === -1) {
+            lyric.classList.remove("hidden-lyric");
+            lyric.classList.add("active-prev");
+          } else if (distance === 1) {
+            lyric.classList.remove("hidden-lyric");
+            lyric.classList.add("active-next");
+          } else if (distance === -2 && visibleRange >= 2) {
+            lyric.classList.remove("hidden-lyric");
+            lyric.classList.add("far-prev");
+          } else if (distance === 2 && visibleRange >= 2) {
+            lyric.classList.remove("hidden-lyric");
+            lyric.classList.add("far-next");
+          } else if (distance === -3 && visibleRange >= 3) {
+            lyric.classList.remove("hidden-lyric");
+            lyric.classList.add("very-far-prev");
+          } else if (distance === 3 && visibleRange >= 3) {
+            lyric.classList.remove("hidden-lyric");
+            lyric.classList.add("very-far-next");
+          }
+          // Lines beyond visibleRange keep hidden-lyric class
+        });
+
+        // Always scroll to center the active lyric
         const lyricsBox = this.lyricsBox;
         const lyricTop = currentLyric.offsetTop;
         const lyricHeight = currentLyric.offsetHeight;
@@ -852,10 +1118,16 @@ class MusicPlayer {
 
         const scrollTo = lyricTop - boxHeight / 2 + lyricHeight / 2;
 
+        // Set flag to ignore this scroll in scroll event listener
+        this.isAutoScrolling = true;
         lyricsBox.scrollTo({
-          top: scrollTo,
+          top: Math.max(0, scrollTo),
           behavior: "smooth",
         });
+        // Reset flag after scroll animation completes
+        setTimeout(() => {
+          this.isAutoScrolling = false;
+        }, 500);
       }
     }
 
@@ -870,27 +1142,12 @@ class MusicPlayer {
       lyricsContainer.classList.add("active");
       this.musicPlayer.classList.add("lyrics-active");
 
-      void lyricsContainer.offsetWidth;
-
-      lyricsContainer.style.left = "-450px";
-      lyricsContainer.style.transform = "translateX(-100%)";
-
-      setTimeout(() => {
-        lyricsContainer.style.left = "0";
-        lyricsContainer.style.transform = "translateX(0)";
-      }, 10);
-
       setTimeout(() => {
         this.updateActiveLyric();
-      }, 300);
+      }, 400);
     } else {
-      lyricsContainer.style.left = "-450px";
-      lyricsContainer.style.transform = "translateX(-100%)";
-
-      setTimeout(() => {
-        lyricsContainer.classList.remove("active");
-        this.musicPlayer.classList.remove("lyrics-active");
-      }, 300);
+      lyricsContainer.classList.remove("active");
+      this.musicPlayer.classList.remove("lyrics-active");
     }
   }
 
@@ -928,7 +1185,11 @@ class MusicPlayer {
     const wasPlaying = this.isPlaying;
 
     if (this.isPlaying) {
-      this.pause();
+      // Pause audio but keep is-playing class for animation continuity
+      this.audioPlayer.pause();
+      this.isPlaying = false;
+      this.stopVisualizer();
+      // Don't remove is-playing class here - we'll handle it after song loads
     }
 
     this.currentSongIndex = index;
@@ -1003,6 +1264,7 @@ class MusicPlayer {
       await this.audioPlayer.play();
       this.isPlaying = true;
       this.playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      document.body.classList.add("is-playing");
 
       if (!this.audioContext) {
         this.setupAudioAnalysis();
@@ -1020,6 +1282,7 @@ class MusicPlayer {
     this.audioPlayer.pause();
     this.isPlaying = false;
     this.playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    document.body.classList.remove("is-playing");
     this.stopVisualizer();
   }
 
@@ -1241,9 +1504,21 @@ class MusicPlayer {
         ) {
           this.pause();
         } else {
+          // Set flags before auto-next to prevent lyrics from appearing
+          this.isChangingSong = true;
+          this.isAutoScrolling = true;
+          if (this.lyricsBox) {
+            this.lyricsBox.classList.remove("user-scrolling");
+          }
           this.nextSong();
         }
       } else {
+        // Set flags before auto-next to prevent lyrics from appearing
+        this.isChangingSong = true;
+        this.isAutoScrolling = true;
+        if (this.lyricsBox) {
+          this.lyricsBox.classList.remove("user-scrolling");
+        }
         this.nextSong();
       }
     });
@@ -1256,6 +1531,9 @@ class MusicPlayer {
   }
 
   setupSearch() {
+    // Only setup search if elements exist
+    if (!this.searchInput || !this.clearSearch) return;
+
     this.searchInput.addEventListener("input", (e) => {
       this.filterSongs(e.target.value);
     });
