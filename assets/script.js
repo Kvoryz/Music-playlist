@@ -285,15 +285,21 @@ class MusicPlayer {
     this.lyricsActive = false;
     this.currentLyricIndex = -1;
 
-    this.maxParallelPreloads = 3;
-    this.preloadRetryLimit = 2;
-    this.preloadRetryDelay = 2000;
-    this.preloadBufferSize = 5;
+    // Adaptive preload settings based on network condition
+    this.networkInfo = this.detectNetworkCondition();
+    this.maxParallelPreloads = this.networkInfo.parallelLoads;
+    this.preloadRetryLimit = this.networkInfo.retryLimit;
+    this.preloadRetryDelay = this.networkInfo.retryDelay;
+    this.preloadBufferSize = this.networkInfo.bufferSize;
+    this.preloadTimeout = this.networkInfo.timeout;
     this.preloadQueue = [];
     this.preloadedAudios = {};
     this.currentlyPreloading = 0;
     this.preloadAttempts = {};
     this.preloadPriorities = [];
+
+    // Listen for network changes
+    this.setupNetworkListener();
 
     this.playBtn = document.getElementById("playBtn");
     this.prevBtn = document.getElementById("prevBtn");
@@ -490,7 +496,7 @@ class MusicPlayer {
         audio.src = "";
         onLoadError();
       }
-    }, 15000);
+    }, this.preloadTimeout);
 
     audio.onloadeddata = () => clearTimeout(loadTimeout);
 
@@ -510,6 +516,160 @@ class MusicPlayer {
     document.querySelectorAll(".playlist-item.preloaded").forEach((item) => {
       item.classList.remove("preloaded");
     });
+  }
+
+  // Detect network condition and return optimal preload settings
+  detectNetworkCondition() {
+    const connection =
+      navigator.connection ||
+      navigator.mozConnection ||
+      navigator.webkitConnection;
+
+    // Default settings for unknown/unsupported browsers
+    const defaultSettings = {
+      parallelLoads: 2,
+      retryLimit: 3,
+      retryDelay: 3000,
+      bufferSize: 3,
+      timeout: 30000,
+      connectionType: "unknown",
+    };
+
+    if (!connection) {
+      console.log("🌐 Network API not supported, using default settings");
+      return defaultSettings;
+    }
+
+    const effectiveType = connection.effectiveType; // 4g, 3g, 2g, slow-2g
+    const downlink = connection.downlink; // Mbps
+    const saveData = connection.saveData; // true if data saver is on
+
+    console.log(
+      `🌐 Network detected: ${effectiveType}, ${downlink}Mbps, saveData: ${saveData}`
+    );
+
+    // If user has data saver enabled, use minimal preloading
+    if (saveData) {
+      return {
+        parallelLoads: 1,
+        retryLimit: 1,
+        retryDelay: 5000,
+        bufferSize: 1,
+        timeout: 60000,
+        connectionType: "data-saver",
+      };
+    }
+
+    // Adaptive settings based on connection type
+    switch (effectiveType) {
+      case "4g":
+        return {
+          parallelLoads: 3,
+          retryLimit: 2,
+          retryDelay: 2000,
+          bufferSize: 5,
+          timeout: 20000,
+          connectionType: "4g",
+        };
+      case "3g":
+        return {
+          parallelLoads: 2,
+          retryLimit: 3,
+          retryDelay: 3000,
+          bufferSize: 3,
+          timeout: 30000,
+          connectionType: "3g",
+        };
+      case "2g":
+        return {
+          parallelLoads: 1,
+          retryLimit: 3,
+          retryDelay: 5000,
+          bufferSize: 2,
+          timeout: 45000,
+          connectionType: "2g",
+        };
+      case "slow-2g":
+        return {
+          parallelLoads: 1,
+          retryLimit: 2,
+          retryDelay: 8000,
+          bufferSize: 1,
+          timeout: 60000,
+          connectionType: "slow-2g",
+        };
+      default:
+        // For wifi or ethernet, check downlink speed
+        if (downlink >= 10) {
+          return {
+            parallelLoads: 4,
+            retryLimit: 2,
+            retryDelay: 1500,
+            bufferSize: 6,
+            timeout: 15000,
+            connectionType: "fast",
+          };
+        } else if (downlink >= 2) {
+          return {
+            parallelLoads: 3,
+            retryLimit: 2,
+            retryDelay: 2000,
+            bufferSize: 5,
+            timeout: 20000,
+            connectionType: "medium",
+          };
+        }
+        return defaultSettings;
+    }
+  }
+
+  // Listen for network changes and update preload settings
+  setupNetworkListener() {
+    const connection =
+      navigator.connection ||
+      navigator.mozConnection ||
+      navigator.webkitConnection;
+
+    if (!connection) return;
+
+    connection.addEventListener("change", () => {
+      const previousType = this.networkInfo.connectionType;
+      this.networkInfo = this.detectNetworkCondition();
+
+      // Update settings
+      this.maxParallelPreloads = this.networkInfo.parallelLoads;
+      this.preloadRetryLimit = this.networkInfo.retryLimit;
+      this.preloadRetryDelay = this.networkInfo.retryDelay;
+      this.preloadBufferSize = this.networkInfo.bufferSize;
+      this.preloadTimeout = this.networkInfo.timeout;
+
+      console.log(
+        `🔄 Network changed: ${previousType} → ${this.networkInfo.connectionType}`
+      );
+
+      // If connection got worse, pause non-essential preloads
+      if (
+        this.isWorseConnection(previousType, this.networkInfo.connectionType)
+      ) {
+        console.log("📉 Connection degraded, reducing preload activity");
+        this.updatePreloadPriorities(this.currentSongIndex);
+      }
+    });
+  }
+
+  // Helper to compare connection quality
+  isWorseConnection(oldType, newType) {
+    const quality = {
+      fast: 6,
+      "4g": 5,
+      medium: 4,
+      "3g": 3,
+      "2g": 2,
+      "slow-2g": 1,
+      "data-saver": 0,
+      unknown: 3,
+    };
+    return (quality[newType] || 3) < (quality[oldType] || 3);
   }
 
   updatePreloadPriorities(currentIndex) {
@@ -903,11 +1063,12 @@ class MusicPlayer {
 
     // Set flag to indicate song is changing (to prevent scroll events)
     this.isChangingSong = true;
+    this.isAutoScrolling = true;
 
     // Reset scroll position and remove user-scrolling class
     if (this.lyricsBox) {
-      this.isAutoScrolling = true;
       this.lyricsBox.classList.remove("user-scrolling");
+      // Use instant scroll instead of smooth to prevent visual jump
       this.lyricsBox.scrollTop = 0;
     }
 
@@ -918,24 +1079,64 @@ class MusicPlayer {
 
     // Immediately update lyrics visibility if lyrics panel is active
     if (this.lyricsActive) {
-      setTimeout(() => {
-        this.currentLyricIndex = -1; // Reset to force update
+      // Wait for DOM to update, then find correct lyric position based on current audio time
+      requestAnimationFrame(() => {
+        // Reset lyric index to force recalculation
+        this.currentLyricIndex = -1;
+
+        // Find the active lyric based on current playback time
+        const currentTime = this.audioPlayer.currentTime || 0;
+        if (lyrics && lyrics.length > 0) {
+          let activeIndex = -1;
+          for (let i = 0; i < lyrics.length; i++) {
+            if (lyrics[i].time <= currentTime) {
+              activeIndex = i;
+            } else {
+              break;
+            }
+          }
+
+          // If song just started (currentTime near 0), use first lyric
+          if (currentTime < 0.5 && activeIndex === -1) {
+            activeIndex = 0;
+          }
+
+          // Pre-position to the correct lyric before showing
+          if (activeIndex >= 0) {
+            const allLyrics =
+              this.lyricsContent.querySelectorAll(".lyrics-line");
+            const targetLyric = allLyrics[activeIndex];
+            if (targetLyric && this.lyricsBox) {
+              const lyricTop = targetLyric.offsetTop;
+              const lyricHeight = targetLyric.offsetHeight;
+              const boxHeight = this.lyricsBox.clientHeight;
+              const scrollTo = lyricTop - boxHeight / 2 + lyricHeight / 2;
+
+              // Instantly scroll to correct position (no animation yet)
+              this.lyricsBox.scrollTop = Math.max(0, scrollTo);
+            }
+          }
+        }
+
+        // Now update the active lyric to show correct visibility
         this.updateActiveLyric();
-        // Show lyrics content after update
+
+        // Show lyrics content after positioning
         this.lyricsContent.style.opacity = "1";
-        // Clear flag after lyrics are updated
+
+        // Clear flags after lyrics are properly positioned
         setTimeout(() => {
           this.isChangingSong = false;
           this.isAutoScrolling = false;
-        }, 800);
-      }, 150);
+        }, 300);
+      });
     } else {
       // Show lyrics content even if panel not active
       this.lyricsContent.style.opacity = "1";
       setTimeout(() => {
         this.isChangingSong = false;
         this.isAutoScrolling = false;
-      }, 800);
+      }, 300);
     }
 
     // Only setup scroll detection once (not every song change)
@@ -1255,10 +1456,18 @@ class MusicPlayer {
     }
   }
 
-  async play() {
+  async play(retryCount = 0) {
+    const maxRetries = 3;
+    const retryDelay = this.networkInfo?.retryDelay || 3000;
+
     try {
       if (!this.audioPlayer.src) {
         this.audioPlayer.src = this.songs[this.currentSongIndex].src;
+      }
+
+      // Wait for enough data to play
+      if (this.audioPlayer.readyState < 2) {
+        await this.waitForAudioReady();
       }
 
       await this.audioPlayer.play();
@@ -1271,11 +1480,70 @@ class MusicPlayer {
       }
       this.animateVisualizer();
     } catch (error) {
-      console.error("Error playing audio:", error);
-      alert(
-        "Cannot play this audio file. Please check if the file exists and is in a supported format."
-      );
+      console.warn(`Play attempt ${retryCount + 1} failed:`, error.name);
+
+      // Check if it's a network-related error that can be retried
+      const isNetworkError =
+        error.name === "NotSupportedError" ||
+        error.name === "AbortError" ||
+        error.name === "NetworkError" ||
+        (error.message && error.message.includes("network"));
+
+      if (isNetworkError && retryCount < maxRetries) {
+        console.log(
+          `🔄 Retrying playback in ${retryDelay}ms... (${
+            retryCount + 1
+          }/${maxRetries})`
+        );
+
+        // Show loading state on play button
+        this.playBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        // Wait and retry
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+
+        // Reload the audio source if needed
+        if (this.audioPlayer.error) {
+          this.audioPlayer.src = this.songs[this.currentSongIndex].src;
+          this.audioPlayer.load();
+        }
+
+        return this.play(retryCount + 1);
+      } else if (error.name === "NotAllowedError") {
+        // User hasn't interacted with the page yet - this is expected, don't show error
+        console.log("Playback requires user interaction first");
+      } else {
+        // All retries failed, just log it without alert
+        console.error("Playback failed after retries:", error);
+        this.playBtn.innerHTML = '<i class="fas fa-play"></i>';
+      }
     }
+  }
+
+  // Helper to wait for audio to be ready
+  waitForAudioReady() {
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error("Audio load timeout"));
+      }, this.networkInfo?.timeout || 30000);
+
+      const onCanPlay = () => {
+        clearTimeout(timeout);
+        this.audioPlayer.removeEventListener("canplay", onCanPlay);
+        this.audioPlayer.removeEventListener("error", onError);
+        resolve();
+      };
+
+      const onError = () => {
+        clearTimeout(timeout);
+        this.audioPlayer.removeEventListener("canplay", onCanPlay);
+        this.audioPlayer.removeEventListener("error", onError);
+        reject(new Error("Audio load error"));
+      };
+
+      this.audioPlayer.addEventListener("canplay", onCanPlay);
+      this.audioPlayer.addEventListener("error", onError);
+    });
   }
 
   pause() {
