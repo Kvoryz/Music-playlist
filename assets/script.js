@@ -704,6 +704,8 @@ class MusicPlayer {
   }
 
   setupVisualizer() {
+    if (!this.visualizer) return;
+
     this.visualizer.innerHTML = "";
     const barCount = 32;
     for (let i = 0; i < barCount; i++) {
@@ -796,7 +798,7 @@ class MusicPlayer {
   }
 
   animateVisualizer() {
-    if (!this.analyser) return;
+    if (!this.analyser || !this.visualizerBars) return;
 
     this.analyser.getByteFrequencyData(this.dataArray);
 
@@ -1316,7 +1318,6 @@ class MusicPlayer {
         const lyricTop = currentLyric.offsetTop;
         const lyricHeight = currentLyric.offsetHeight;
         const boxHeight = lyricsBox.clientHeight;
-
         const scrollTo = lyricTop - boxHeight / 2 + lyricHeight / 2;
 
         // Set flag to ignore this scroll in scroll event listener
