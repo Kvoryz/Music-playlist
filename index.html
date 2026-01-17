@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
@@ -69,6 +69,49 @@
       </div>
     </div>
 
+    <!-- Bottom Left Controls -->
+    <div class="bottom-left-controls">
+      <!-- Background Switcher -->
+      <div class="bg-switcher-wrapper">
+        <button
+          class="control-btn small"
+          id="bgSwitcherBtn"
+          title="Background Mode"
+        >
+          <i class="fas fa-image"></i>
+        </button>
+        <div class="bg-switcher-menu" id="bgSwitcherMenu">
+          <div class="bg-switcher-option active" data-mode="rotation">
+            <i class="fas fa-images"></i> Rotation
+          </div>
+          <div class="bg-switcher-option" data-mode="album">
+            <i class="fas fa-compact-disc"></i> Album Art
+          </div>
+        </div>
+      </div>
+
+      <!-- Sleep Timer -->
+      <div class="sleep-timer-wrapper">
+        <button
+          class="control-btn small"
+          id="sleepTimerBtn"
+          title="Sleep Timer"
+        >
+          <i class="fas fa-moon"></i>
+        </button>
+        <div class="sleep-timer-menu" id="sleepTimerMenu">
+          <div class="sleep-timer-option" data-minutes="15">15 min</div>
+          <div class="sleep-timer-option" data-minutes="30">30 min</div>
+          <div class="sleep-timer-option" data-minutes="45">45 min</div>
+          <div class="sleep-timer-option" data-minutes="60">60 min</div>
+          <div class="sleep-timer-option cancel" data-minutes="0">
+            Cancel Timer
+          </div>
+        </div>
+        <span class="sleep-timer-display" id="sleepTimerDisplay"></span>
+      </div>
+    </div>
+
     <div class="lyrics-container" id="lyricsContainer">
       <div class="lyrics-box">
         <div class="lyrics-content" id="lyricsContent"></div>
@@ -84,6 +127,12 @@
     </div>
 
     <audio id="audioPlayer" preload="metadata" crossorigin="anonymous"></audio>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer">
+      <div class="toast-icon"></div>
+      <div class="toast-message"></div>
+    </div>
 
     <div id="audioPreloadContainer" style="display: none"></div>
 

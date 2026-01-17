@@ -293,7 +293,6 @@ class MusicPlayer {
     this.lyricsActive = false;
     this.currentLyricIndex = -1;
 
-    // Adaptive preload settings based on network condition
     this.networkInfo = this.detectNetworkCondition();
     this.maxParallelPreloads = this.networkInfo.parallelLoads;
     this.preloadRetryLimit = this.networkInfo.retryLimit;
@@ -306,7 +305,6 @@ class MusicPlayer {
     this.preloadAttempts = {};
     this.preloadPriorities = [];
 
-    // Listen for network changes
     this.setupNetworkListener();
 
     this.playBtn = document.getElementById("playBtn");
@@ -331,7 +329,7 @@ class MusicPlayer {
     this.playlistTrigger = document.getElementById("playlistTrigger");
     this.visualizer = document.getElementById("visualizer");
     this.audioPreloadContainer = document.getElementById(
-      "audioPreloadContainer"
+      "audioPreloadContainer",
     );
     this.body = document.body;
     this.musicPlayer = document.getElementById("musicPlayer");
@@ -339,6 +337,11 @@ class MusicPlayer {
     this.lyricsContent = document.getElementById("lyricsContent");
     this.closeLyrics = document.getElementById("closeLyrics");
     this.lyricsBox = this.lyricsContainer.querySelector(".lyrics-box");
+
+    this.toastContainer = document.getElementById("toastContainer");
+    this.toastIcon = this.toastContainer.querySelector(".toast-icon");
+    this.toastMessage = this.toastContainer.querySelector(".toast-message");
+    this.toastTimeout = null;
 
     this.backgroundImages = [
       "./image/background.jpg",
@@ -364,6 +367,22 @@ class MusicPlayer {
     this.searchActive = false;
     this.isTypingInSearch = false;
 
+    this.sleepTimerBtn = document.getElementById("sleepTimerBtn");
+    this.sleepTimerMenu = document.getElementById("sleepTimerMenu");
+    this.sleepTimerDisplay = document.getElementById("sleepTimerDisplay");
+    this.sleepTimerTimeout = null;
+    this.sleepTimerEndTime = null;
+    this.sleepTimerInterval = null;
+
+    this.bgSwitcherBtn = document.getElementById("bgSwitcherBtn");
+    this.bgSwitcherMenu = document.getElementById("bgSwitcherMenu");
+    this.backgroundMode = localStorage.getItem("harmony_bg_mode") || "rotation";
+
+    this.crossfadeEnabled = true;
+    this.crossfadeDuration = 1000;
+    this.isCrossfading = false;
+    this.crossfadeAudio = null;
+
     this.init();
   }
 
@@ -373,11 +392,13 @@ class MusicPlayer {
     this.setupAudioEvents();
     this.setupSearch();
     this.setupCursorHide();
+    this.setupSleepTimer();
+    this.setupBackgroundSwitcher();
     this.renderPlaylist();
     this.updateSongDisplay();
     this.generateShuffledIndices();
     this.currentShuffleIndex = this.shuffledIndices.indexOf(
-      this.currentSongIndex
+      this.currentSongIndex,
     );
     this.updateBackground(false);
     this.startBackgroundRotation();
@@ -469,7 +490,7 @@ class MusicPlayer {
       this.currentlyPreloading--;
 
       const playlistItem = this.playlistContainer.querySelector(
-        `.playlist-item[data-index="${index}"]`
+        `.playlist-item[data-index="${index}"]`,
       );
       if (playlistItem) {
         playlistItem.classList.add("preloaded");
@@ -480,7 +501,7 @@ class MusicPlayer {
 
     const onLoadError = () => {
       console.error(
-        `Failed to preload song: ${song.title} (attempt ${this.preloadAttempts[index]})`
+        `Failed to preload song: ${song.title} (attempt ${this.preloadAttempts[index]})`,
       );
       this.currentlyPreloading--;
       audio.remove();
@@ -526,14 +547,12 @@ class MusicPlayer {
     });
   }
 
-  // Detect network condition and return optimal preload settings
   detectNetworkCondition() {
     const connection =
       navigator.connection ||
       navigator.mozConnection ||
       navigator.webkitConnection;
 
-    // Default settings for unknown/unsupported browsers
     const defaultSettings = {
       parallelLoads: 2,
       retryLimit: 3,
@@ -548,15 +567,14 @@ class MusicPlayer {
       return defaultSettings;
     }
 
-    const effectiveType = connection.effectiveType; // 4g, 3g, 2g, slow-2g
-    const downlink = connection.downlink; // Mbps
-    const saveData = connection.saveData; // true if data saver is on
+    const effectiveType = connection.effectiveType;
+    const downlink = connection.downlink;
+    const saveData = connection.saveData;
 
     console.log(
-      `🌐 Network detected: ${effectiveType}, ${downlink}Mbps, saveData: ${saveData}`
+      `🌐 Network detected: ${effectiveType}, ${downlink}Mbps, saveData: ${saveData}`,
     );
 
-    // If user has data saver enabled, use minimal preloading
     if (saveData) {
       return {
         parallelLoads: 1,
@@ -568,7 +586,6 @@ class MusicPlayer {
       };
     }
 
-    // Adaptive settings based on connection type
     switch (effectiveType) {
       case "4g":
         return {
@@ -607,7 +624,6 @@ class MusicPlayer {
           connectionType: "slow-2g",
         };
       default:
-        // For wifi or ethernet, check downlink speed
         if (downlink >= 10) {
           return {
             parallelLoads: 4,
@@ -631,7 +647,6 @@ class MusicPlayer {
     }
   }
 
-  // Listen for network changes and update preload settings
   setupNetworkListener() {
     const connection =
       navigator.connection ||
@@ -644,7 +659,6 @@ class MusicPlayer {
       const previousType = this.networkInfo.connectionType;
       this.networkInfo = this.detectNetworkCondition();
 
-      // Update settings
       this.maxParallelPreloads = this.networkInfo.parallelLoads;
       this.preloadRetryLimit = this.networkInfo.retryLimit;
       this.preloadRetryDelay = this.networkInfo.retryDelay;
@@ -652,10 +666,9 @@ class MusicPlayer {
       this.preloadTimeout = this.networkInfo.timeout;
 
       console.log(
-        `🔄 Network changed: ${previousType} → ${this.networkInfo.connectionType}`
+        `🔄 Network changed: ${previousType} → ${this.networkInfo.connectionType}`,
       );
 
-      // If connection got worse, pause non-essential preloads
       if (
         this.isWorseConnection(previousType, this.networkInfo.connectionType)
       ) {
@@ -665,7 +678,6 @@ class MusicPlayer {
     });
   }
 
-  // Helper to compare connection quality
   isWorseConnection(oldType, newType) {
     const quality = {
       fast: 6,
@@ -724,13 +736,21 @@ class MusicPlayer {
     }
 
     this.visualizerBars = Array.from(
-      this.visualizer.querySelectorAll(".visualizer-bar")
+      this.visualizer.querySelectorAll(".visualizer-bar"),
     );
   }
 
   startBackgroundRotation() {
+    if (this.backgroundMode !== "rotation") return;
+
+    if (this.backgroundChangeInterval) {
+      clearInterval(this.backgroundChangeInterval);
+    }
+
     this.backgroundChangeInterval = setInterval(() => {
-      this.updateBackground(true);
+      if (this.backgroundMode === "rotation") {
+        this.updateBackground(true);
+      }
     }, 30000);
   }
 
@@ -777,23 +797,161 @@ class MusicPlayer {
     }
   }
 
-  // Update background with album art blur
   updateAlbumBackground(albumArtUrl) {
-    this.backgroundBlur.style.transition =
-      "background-image 1s ease-in-out, opacity 1s ease-in-out";
-    this.backgroundBlur.style.backgroundImage = `url('${albumArtUrl}')`;
-    this.backgroundBlur.style.backgroundSize = "cover";
-    this.backgroundBlur.style.backgroundPosition = "center";
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+
+    img.onload = () => {
+      try {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = 50;
+        canvas.height = 50;
+
+        ctx.drawImage(img, 0, 0, 50, 50);
+        const imageData = ctx.getImageData(0, 0, 50, 50).data;
+
+        const colorCounts = {};
+
+        for (let i = 0; i < imageData.length; i += 4) {
+          const r = Math.round(imageData[i] / 24) * 24;
+          const g = Math.round(imageData[i + 1] / 24) * 24;
+          const b = Math.round(imageData[i + 2] / 24) * 24;
+
+          const brightness = (r + g + b) / 3;
+          if (brightness < 20 || brightness > 235) continue;
+
+          const key = `${r},${g},${b}`;
+          colorCounts[key] = (colorCounts[key] || 0) + 1;
+        }
+
+        const sortedColors = Object.entries(colorCounts)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 3)
+          .map(([color]) => color.split(",").map(Number));
+
+        const boostColor = (color, amount = 40) => {
+          return color.map((c) => Math.min(255, c + amount));
+        };
+
+        const isGreyish = (color) => {
+          const max = Math.max(...color);
+          const min = Math.min(...color);
+          return max - min < 30;
+        };
+
+        const addTint = (color, tint) => {
+          return color.map((c, i) => Math.min(255, c + tint[i]));
+        };
+
+        let c1, c2, c3;
+        if (sortedColors.length >= 3) {
+          c1 = boostColor(sortedColors[0], 50);
+          c2 = boostColor(sortedColors[1], 40);
+          c3 = boostColor(sortedColors[2], 30);
+        } else if (sortedColors.length === 2) {
+          c1 = boostColor(sortedColors[0], 50);
+          c2 = boostColor(sortedColors[1], 40);
+          c3 = boostColor(sortedColors[0], 20);
+        } else {
+          c1 = boostColor(sortedColors[0] || [100, 50, 80], 50);
+          c2 = c1.map((c) => Math.min(255, c + 30));
+          c3 = c1.map((c) => Math.max(0, c - 20));
+        }
+
+        if (isGreyish(c1) && isGreyish(c2)) {
+          c1 = addTint(c1, [40, 20, -10]);
+          c2 = addTint(c2, [30, 15, 0]);
+          c3 = addTint(c3, [20, 10, 5]);
+        }
+
+        this.backgroundBlur.style.transition =
+          "background-image 1.5s ease-in-out, filter 1s ease-in-out";
+        this.backgroundBlur.style.backgroundImage = `url('${albumArtUrl}')`;
+        this.backgroundBlur.style.backgroundSize = "cover";
+        this.backgroundBlur.style.backgroundPosition = "center";
+        this.backgroundBlur.style.filter =
+          "blur(40px) saturate(1.8) brightness(0.6)";
+        this.backgroundBlur.style.animation =
+          "albumBgMove 20s ease-in-out infinite";
+
+        let overlay = document.getElementById("albumGradientOverlay");
+        if (!overlay) {
+          overlay = document.createElement("div");
+          overlay.id = "albumGradientOverlay";
+          overlay.style.cssText = `
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            transition: opacity 1.5s ease-in-out, background 2s ease-in-out;
+            animation: waveFlow 20s ease-in-out infinite;
+            transform-origin: center center;
+          `;
+
+          if (!document.getElementById("waveFlowKeyframes")) {
+            const style = document.createElement("style");
+            style.id = "waveFlowKeyframes";
+            style.textContent = `
+              @keyframes waveFlow {
+                0%, 100% {
+                  transform: scale(1.2) translate(0%, 0%);
+                }
+                25% {
+                  transform: scale(1.25) translate(2%, 3%);
+                }
+                50% {
+                  transform: scale(1.3) translate(-2%, 2%);
+                }
+                75% {
+                  transform: scale(1.22) translate(3%, -2%);
+                }
+              }
+              
+              html, body {
+                overflow-x: hidden;
+              }
+            `;
+            document.head.appendChild(style);
+          }
+
+          document.body.appendChild(overlay);
+        }
+
+        overlay.style.background = `
+          radial-gradient(ellipse 100% 80% at 30% 20%, rgba(${c1[0]}, ${c1[1]}, ${c1[2]}, 0.6) 0%, transparent 50%),
+          radial-gradient(ellipse 80% 100% at 70% 30%, rgba(${c2[0]}, ${c2[1]}, ${c2[2]}, 0.5) 0%, transparent 45%),
+          radial-gradient(ellipse 90% 70% at 60% 80%, rgba(${c3[0]}, ${c3[1]}, ${c3[2]}, 0.5) 0%, transparent 50%),
+          radial-gradient(ellipse 70% 90% at 20% 70%, rgba(${c2[0]}, ${c2[1]}, ${c2[2]}, 0.4) 0%, transparent 45%),
+          radial-gradient(ellipse 60% 60% at 80% 90%, rgba(${c1[0]}, ${c1[1]}, ${c1[2]}, 0.35) 0%, transparent 40%)
+        `;
+        overlay.style.opacity = "1";
+      } catch (e) {
+        console.warn("Color extraction failed:", e);
+        this.backgroundBlur.style.backgroundImage = `url('${albumArtUrl}')`;
+        this.backgroundBlur.style.filter = "blur(80px) brightness(0.5)";
+      }
+    };
+
+    img.onerror = () => {
+      this.backgroundBlur.style.backgroundImage = `url('${albumArtUrl}')`;
+      this.backgroundBlur.style.filter = "blur(80px)";
+    };
+
+    img.src = albumArtUrl;
   }
 
   setupAudioAnalysis() {
     if (!this.audioContext) {
-      this.audioContext = new (window.AudioContext ||
-        window.webkitAudioContext)();
+      this.audioContext = new (
+        window.AudioContext || window.webkitAudioContext
+      )();
       this.analyser = this.audioContext.createAnalyser();
       this.analyser.fftSize = 256;
       this.source = this.audioContext.createMediaElementSource(
-        this.audioPlayer
+        this.audioPlayer,
       );
       this.source.connect(this.analyser);
       this.analyser.connect(this.audioContext.destination);
@@ -811,7 +969,7 @@ class MusicPlayer {
     this.analyser.getByteFrequencyData(this.dataArray);
 
     const binSkip = Math.floor(
-      this.dataArray.length / this.visualizerBars.length
+      this.dataArray.length / this.visualizerBars.length,
     );
 
     for (let i = 0; i < this.visualizerBars.length; i++) {
@@ -863,7 +1021,6 @@ class MusicPlayer {
       ];
     }
 
-    // Move current song to the first position
     const currentPos = this.shuffledIndices.indexOf(this.currentSongIndex);
     if (currentPos > 0) {
       this.shuffledIndices.splice(currentPos, 1);
@@ -888,8 +1045,12 @@ class MusicPlayer {
       this.generateShuffledIndices();
     }
 
-    // Re-render playlist to show shuffled/normal order
     this.renderPlaylist();
+
+    this.showToast(
+      "fas fa-random",
+      this.isShuffled ? "Shuffle: On" : "Shuffle: Off",
+    );
   }
 
   toggleRepeat() {
@@ -907,22 +1068,24 @@ class MusicPlayer {
         icon.className = "fas fa-repeat";
         this.repeatBtn.classList.remove("active");
         this.repeatBtn.title = "Repeat Off";
+        this.showToast("fas fa-repeat", "Repeat: Off");
         break;
       case 1:
         icon.className = "fas fa-repeat";
         this.repeatBtn.classList.add("active");
         this.repeatBtn.title = "Repeat One";
+        this.showToast("fas fa-repeat", "Repeat: One");
         break;
       case 2:
-        icon.className = "fas fa-arrow-right";
+        icon.className = "fas fa-forward-step";
         this.repeatBtn.classList.add("active");
         this.repeatBtn.title = "Play Once";
+        this.showToast("fas fa-forward-step", "Play Once");
         break;
     }
   }
 
   renderPlaylist() {
-    // Use shuffled order if shuffle is active, otherwise use normal order
     const displayOrder = this.isShuffled
       ? this.shuffledIndices
       : [...Array(this.songs.length).keys()];
@@ -978,8 +1141,9 @@ class MusicPlayer {
     this.albumArt.style.backgroundPosition = "center";
     this.albumArt.textContent = "";
 
-    // Update background with album art
-    this.updateAlbumBackground(song.albumArt);
+    if (this.backgroundMode === "album") {
+      this.updateAlbumBackground(song.albumArt);
+    }
 
     this.durationEl.textContent = "--:--";
 
@@ -994,18 +1158,15 @@ class MusicPlayer {
   }
 
   async updateLyricsDisplay() {
-    // Hide lyrics content during loading to prevent flash
     this.lyricsContent.style.opacity = "0";
     this.lyricsContent.innerHTML = "";
     const song = this.songs[this.currentSongIndex];
 
-    // Show loading indicator
     const loadingEl = document.createElement("div");
     loadingEl.className = "no-lyrics-message";
     loadingEl.textContent = "Loading lyrics...";
     this.lyricsContent.appendChild(loadingEl);
 
-    // Try to get lyrics from LRC file first, then fall back to lyricsData
     let lyrics = null;
     if (song.lyricsKey && typeof lrcLoader !== "undefined") {
       lyrics = await lrcLoader.getLyrics(song.lyricsKey);
@@ -1013,22 +1174,17 @@ class MusicPlayer {
       lyrics = lyricsData[song.lyricsKey]?.lines;
     }
 
-    // Store current lyrics for updateActiveLyric to use
     this.currentLyrics = lyrics;
 
-    // Clear loading indicator
     this.lyricsContent.innerHTML = "";
 
     if (lyrics && lyrics.length > 0) {
       lyrics.forEach((line, index) => {
         const lyricLine = document.createElement("div");
-        // Add hidden-lyric class by default so lyrics are hidden on initial load
         lyricLine.className = "lyrics-line hidden-lyric";
 
-        // Add special class for animated dots (instrumental parts)
         if (line.text === "•••") {
           lyricLine.classList.add("dots-placeholder");
-          // Create individual dot elements for wave animation
           lyricLine.innerHTML =
             '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
         } else {
@@ -1038,21 +1194,17 @@ class MusicPlayer {
         lyricLine.dataset.time = line.time;
         lyricLine.dataset.index = index;
 
-        // Add click handler to seek to this lyric's time
         lyricLine.addEventListener("click", () => {
           const seekTime = parseFloat(lyricLine.dataset.time);
           if (!isNaN(seekTime)) {
-            // Set flags to prevent scroll event from triggering
             this.isClickingLyric = true;
             this.isAutoScrolling = true;
             this.lyricsBox.classList.remove("user-scrolling");
 
             this.audioPlayer.currentTime = seekTime;
-            // Force update active lyric
             this.currentLyricIndex = -1;
             this.updateActiveLyric();
 
-            // Clear flags after animation
             setTimeout(() => {
               this.isClickingLyric = false;
               this.isAutoScrolling = false;
@@ -1071,30 +1223,22 @@ class MusicPlayer {
 
     this.currentLyricIndex = -1;
 
-    // Set flag to indicate song is changing (to prevent scroll events)
     this.isChangingSong = true;
     this.isAutoScrolling = true;
 
-    // Reset scroll position and remove user-scrolling class
     if (this.lyricsBox) {
       this.lyricsBox.classList.remove("user-scrolling");
-      // Use instant scroll instead of smooth to prevent visual jump
       this.lyricsBox.scrollTop = 0;
     }
 
-    // Ensure is-playing class is present if music is playing
     if (this.isPlaying) {
       document.body.classList.add("is-playing");
     }
 
-    // Immediately update lyrics visibility if lyrics panel is active
     if (this.lyricsActive) {
-      // Wait for DOM to update, then find correct lyric position based on current audio time
       requestAnimationFrame(() => {
-        // Reset lyric index to force recalculation
         this.currentLyricIndex = -1;
 
-        // Find the active lyric based on current playback time
         const currentTime = this.audioPlayer.currentTime || 0;
         if (lyrics && lyrics.length > 0) {
           let activeIndex = -1;
@@ -1106,12 +1250,10 @@ class MusicPlayer {
             }
           }
 
-          // If song just started (currentTime near 0), use first lyric
           if (currentTime < 0.5 && activeIndex === -1) {
             activeIndex = 0;
           }
 
-          // Pre-position to the correct lyric before showing
           if (activeIndex >= 0) {
             const allLyrics =
               this.lyricsContent.querySelectorAll(".lyrics-line");
@@ -1122,26 +1264,21 @@ class MusicPlayer {
               const boxHeight = this.lyricsBox.clientHeight;
               const scrollTo = lyricTop - boxHeight / 2 + lyricHeight / 2;
 
-              // Instantly scroll to correct position (no animation yet)
               this.lyricsBox.scrollTop = Math.max(0, scrollTo);
             }
           }
         }
 
-        // Now update the active lyric to show correct visibility
         this.updateActiveLyric();
 
-        // Show lyrics content after positioning
         this.lyricsContent.style.opacity = "1";
 
-        // Clear flags after lyrics are properly positioned
         setTimeout(() => {
           this.isChangingSong = false;
           this.isAutoScrolling = false;
         }, 300);
       });
     } else {
-      // Show lyrics content even if panel not active
       this.lyricsContent.style.opacity = "1";
       setTimeout(() => {
         this.isChangingSong = false;
@@ -1149,13 +1286,11 @@ class MusicPlayer {
       }, 300);
     }
 
-    // Only setup scroll detection once (not every song change)
     if (!this.lyricsScrollSetup) {
       this.lyricsScrollSetup = true;
       let scrollTimeout;
       this.isAutoScrolling = false;
 
-      // Detect when tab/window becomes visible again to ignore scroll events
       const setRecentlyVisible = () => {
         this.recentlyBecameVisible = true;
         setTimeout(() => {
@@ -1176,7 +1311,6 @@ class MusicPlayer {
       this.lyricsBox.addEventListener(
         "scroll",
         () => {
-          // Ignore if this is auto-scroll, tab just became visible, song is changing, or clicking lyric
           if (
             this.isAutoScrolling ||
             this.recentlyBecameVisible ||
@@ -1185,20 +1319,16 @@ class MusicPlayer {
           )
             return;
 
-          // Add class to indicate user is scrolling
           this.lyricsBox.classList.add("user-scrolling");
 
-          // Clear previous timeout
           clearTimeout(scrollTimeout);
 
-          // Remove class and scroll back to active lyric after user stops scrolling
           scrollTimeout = setTimeout(() => {
             this.lyricsBox.classList.remove("user-scrolling");
-            // Auto-scroll back to active lyric after 3 seconds
             this.scrollToActiveLyric();
           }, 3000);
         },
-        { passive: true }
+        { passive: true },
       );
     }
   }
@@ -1231,7 +1361,6 @@ class MusicPlayer {
 
     const currentTime = this.audioPlayer.currentTime;
 
-    // Use cached lyrics from updateLyricsDisplay
     const lyrics = this.currentLyrics;
 
     if (!lyrics || lyrics.length === 0) return;
@@ -1249,7 +1378,6 @@ class MusicPlayer {
 
     if (activeIndex === this.currentLyricIndex) return;
 
-    // Calculate max word count per line to determine visibility range
     let maxWords = 0;
     this.currentLyrics.forEach((line) => {
       if (line.text && line.text !== "•••") {
@@ -1257,10 +1385,8 @@ class MusicPlayer {
         if (wordCount > maxWords) maxWords = wordCount;
       }
     });
-    // If any line has more than 10 words, use range of 2, otherwise 3
     const visibleRange = maxWords > 10 ? 2 : 3;
 
-    // Remove all state classes from all lyrics first
     allLyrics.forEach((lyric) => {
       lyric.classList.remove(
         "active",
@@ -1269,36 +1395,30 @@ class MusicPlayer {
         "far-prev",
         "far-next",
         "very-far-prev",
-        "very-far-next"
+        "very-far-next",
       );
-      // Add hidden-lyric by default, will be removed for visible lines
       lyric.classList.add("hidden-lyric");
     });
 
     if (activeIndex >= 0) {
       const currentLyric = allLyrics[activeIndex];
       if (currentLyric) {
-        // Remove hidden and add active
         currentLyric.classList.remove("hidden-lyric");
         currentLyric.classList.add("active");
 
-        // Force restart animation for dots-placeholder
         if (currentLyric.classList.contains("dots-placeholder")) {
           const dots = currentLyric.querySelectorAll(".dot");
           dots.forEach((dot) => {
-            // Force reflow to restart animation
             dot.style.animation = "none";
-            dot.offsetHeight; // Trigger reflow
+            dot.offsetHeight;
             dot.style.animation = "";
           });
         }
 
-        // Add classes based on distance from active line
         allLyrics.forEach((lyric, index) => {
           const distance = index - activeIndex;
 
           if (distance === 0) {
-            // Already handled above
           } else if (distance === -1) {
             lyric.classList.remove("hidden-lyric");
             lyric.classList.add("active-prev");
@@ -1318,23 +1438,19 @@ class MusicPlayer {
             lyric.classList.remove("hidden-lyric");
             lyric.classList.add("very-far-next");
           }
-          // Lines beyond visibleRange keep hidden-lyric class
         });
 
-        // Always scroll to center the active lyric
         const lyricsBox = this.lyricsBox;
         const lyricTop = currentLyric.offsetTop;
         const lyricHeight = currentLyric.offsetHeight;
         const boxHeight = lyricsBox.clientHeight;
         const scrollTo = lyricTop - boxHeight / 2 + lyricHeight / 2;
 
-        // Set flag to ignore this scroll in scroll event listener
         this.isAutoScrolling = true;
         lyricsBox.scrollTo({
           top: Math.max(0, scrollTo),
           behavior: "smooth",
         });
-        // Reset flag after scroll animation completes
         setTimeout(() => {
           this.isAutoScrolling = false;
         }, 500);
@@ -1393,13 +1509,38 @@ class MusicPlayer {
     if (index < 0 || index >= this.songs.length) return;
 
     const wasPlaying = this.isPlaying;
+    const previousIndex = this.currentSongIndex;
+
+    if (
+      wasPlaying &&
+      this.crossfadeEnabled &&
+      !this.isCrossfading &&
+      previousIndex !== index
+    ) {
+      this.currentSongIndex = index;
+      if (this.isShuffled) {
+        this.currentShuffleIndex = this.shuffledIndices.indexOf(index);
+      }
+      this.updateSongDisplay();
+      this.updateBackground(true);
+
+      const crossfadeSuccess = await this.performCrossfade(index);
+
+      if (crossfadeSuccess) {
+        this.updatePreloadPriorities(index);
+        if (this.audioContext && this.audioContext.state === "suspended") {
+          this.audioContext.resume();
+        }
+        this.setupAudioAnalysis();
+        this.animateVisualizer();
+        return;
+      }
+    }
 
     if (this.isPlaying) {
-      // Pause audio but keep is-playing class for animation continuity
       this.audioPlayer.pause();
       this.isPlaying = false;
       this.stopVisualizer();
-      // Don't remove is-playing class here - we'll handle it after song loads
     }
 
     this.currentSongIndex = index;
@@ -1474,7 +1615,6 @@ class MusicPlayer {
         this.audioPlayer.src = this.songs[this.currentSongIndex].src;
       }
 
-      // Wait for enough data to play
       if (this.audioPlayer.readyState < 2) {
         await this.waitForAudioReady();
       }
@@ -1491,7 +1631,6 @@ class MusicPlayer {
     } catch (error) {
       console.warn(`Play attempt ${retryCount + 1} failed:`, error.name);
 
-      // Check if it's a network-related error that can be retried
       const isNetworkError =
         error.name === "NotSupportedError" ||
         error.name === "AbortError" ||
@@ -1502,16 +1641,13 @@ class MusicPlayer {
         console.log(
           `🔄 Retrying playback in ${retryDelay}ms... (${
             retryCount + 1
-          }/${maxRetries})`
+          }/${maxRetries})`,
         );
 
-        // Show loading state on play button
         this.playBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
-        // Wait and retry
         await new Promise((resolve) => setTimeout(resolve, retryDelay));
 
-        // Reload the audio source if needed
         if (this.audioPlayer.error) {
           this.audioPlayer.src = this.songs[this.currentSongIndex].src;
           this.audioPlayer.load();
@@ -1519,17 +1655,14 @@ class MusicPlayer {
 
         return this.play(retryCount + 1);
       } else if (error.name === "NotAllowedError") {
-        // User hasn't interacted with the page yet - this is expected, don't show error
         console.log("Playback requires user interaction first");
       } else {
-        // All retries failed, just log it without alert
         console.error("Playback failed after retries:", error);
         this.playBtn.innerHTML = '<i class="fas fa-play"></i>';
       }
     }
   }
 
-  // Helper to wait for audio to be ready
   waitForAudioReady() {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
@@ -1646,7 +1779,7 @@ class MusicPlayer {
         (this.audioPlayer.currentTime / this.audioPlayer.duration) * 100;
       this.progress.style.width = `${progressPercent}%`;
       this.currentTimeEl.textContent = this.formatTime(
-        this.audioPlayer.currentTime
+        this.audioPlayer.currentTime,
       );
     }
   }
@@ -1677,16 +1810,29 @@ class MusicPlayer {
       this.toggleLyrics();
     });
 
-    this.playBtn.addEventListener("click", () => this.togglePlay());
-    this.prevBtn.addEventListener("click", () => this.prevSong());
+    this.playBtn.addEventListener("click", () => {
+      this.addClickFeedback(this.playBtn);
+      this.togglePlay();
+    });
+    this.prevBtn.addEventListener("click", () => {
+      this.addClickFeedback(this.prevBtn);
+      this.prevSong();
+    });
 
     this.nextBtn.addEventListener("click", () => {
+      this.addClickFeedback(this.nextBtn);
       this.isNextButtonPressed = true;
       this.nextSong();
     });
 
-    this.shuffleBtn.addEventListener("click", () => this.toggleShuffle());
-    this.repeatBtn.addEventListener("click", () => this.toggleRepeat());
+    this.shuffleBtn.addEventListener("click", () => {
+      this.addClickFeedback(this.shuffleBtn);
+      this.toggleShuffle();
+    });
+    this.repeatBtn.addEventListener("click", () => {
+      this.addClickFeedback(this.repeatBtn);
+      this.toggleRepeat();
+    });
 
     this.progressBar.addEventListener("click", (e) => {
       if (this.audioPlayer.duration) {
@@ -1735,12 +1881,6 @@ class MusicPlayer {
             this.toggleShuffle();
           }
           break;
-        case "KeyR":
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            this.toggleRepeat();
-          }
-          break;
       }
     });
   }
@@ -1755,15 +1895,15 @@ class MusicPlayer {
       this.durationEl.textContent = this.formatTime(this.audioPlayer.duration);
 
       const activeItem = this.playlistContainer.querySelector(
-        ".playlist-item.active"
+        ".playlist-item.active",
       );
       if (activeItem) {
         const durationElement = activeItem.querySelector(
-          ".playlist-item-duration"
+          ".playlist-item-duration",
         );
         if (durationElement) {
           durationElement.textContent = this.formatTime(
-            this.audioPlayer.duration
+            this.audioPlayer.duration,
           );
         }
       }
@@ -1781,7 +1921,6 @@ class MusicPlayer {
         ) {
           this.pause();
         } else {
-          // Set flags before auto-next to prevent lyrics from appearing
           this.isChangingSong = true;
           this.isAutoScrolling = true;
           if (this.lyricsBox) {
@@ -1790,7 +1929,6 @@ class MusicPlayer {
           this.nextSong();
         }
       } else {
-        // Set flags before auto-next to prevent lyrics from appearing
         this.isChangingSong = true;
         this.isAutoScrolling = true;
         if (this.lyricsBox) {
@@ -1808,7 +1946,6 @@ class MusicPlayer {
   }
 
   setupSearch() {
-    // Only setup search if elements exist
     if (!this.searchInput || !this.clearSearch) return;
 
     this.searchInput.addEventListener("input", (e) => {
@@ -1869,7 +2006,7 @@ class MusicPlayer {
     const playlistHTML = this.searchResults
       .map((song) => {
         const index = this.songs.findIndex(
-          (s) => s.title === song.title && s.artist === song.artist
+          (s) => s.title === song.title && s.artist === song.artist,
         );
         return `
                 <div class="playlist-item ${
@@ -1902,6 +2039,34 @@ class MusicPlayer {
       });
   }
 
+  addClickFeedback(button) {
+    if (!button) return;
+    button.classList.remove("clicked");
+    void button.offsetWidth;
+    button.classList.add("clicked");
+
+    setTimeout(() => {
+      button.classList.remove("clicked");
+    }, 300);
+  }
+
+  showToast(icon, message, duration = 1500) {
+    if (!this.toastContainer) return;
+
+    if (this.toastTimeout) {
+      clearTimeout(this.toastTimeout);
+    }
+
+    this.toastIcon.innerHTML = `<i class="${icon}"></i>`;
+    this.toastMessage.textContent = message;
+
+    this.toastContainer.classList.add("show");
+
+    this.toastTimeout = setTimeout(() => {
+      this.toastContainer.classList.remove("show");
+    }, duration);
+  }
+
   destroy() {
     if (this.backgroundChangeInterval) {
       clearInterval(this.backgroundChangeInterval);
@@ -1909,6 +2074,260 @@ class MusicPlayer {
     this.stopVisualizer();
     if (this.audioContext) {
       this.audioContext.close();
+    }
+    this.clearSleepTimer();
+  }
+
+  loadFromStorage(key, defaultValue) {
+    try {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : defaultValue;
+    } catch (e) {
+      console.error(`Error loading ${key} from storage:`, e);
+      return defaultValue;
+    }
+  }
+
+  saveToStorage(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+      console.error(`Error saving ${key} to storage:`, e);
+    }
+  }
+
+  setupSleepTimer() {
+    if (!this.sleepTimerBtn || !this.sleepTimerMenu) return;
+
+    this.sleepTimerBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.sleepTimerMenu.classList.toggle("active");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (
+        !this.sleepTimerMenu.contains(e.target) &&
+        e.target !== this.sleepTimerBtn
+      ) {
+        this.sleepTimerMenu.classList.remove("active");
+      }
+    });
+
+    this.sleepTimerMenu
+      .querySelectorAll(".sleep-timer-option")
+      .forEach((option) => {
+        option.addEventListener("click", () => {
+          const minutes = parseInt(option.dataset.minutes);
+          this.setSleepTimer(minutes);
+          this.sleepTimerMenu.classList.remove("active");
+        });
+      });
+  }
+
+  setSleepTimer(minutes) {
+    this.clearSleepTimer();
+
+    if (minutes === 0) {
+      return;
+    }
+
+    this.sleepTimerEndTime = Date.now() + minutes * 60 * 1000;
+
+    this.sleepTimerInterval = setInterval(() => {
+      this.updateSleepTimerDisplay();
+    }, 1000);
+
+    this.sleepTimerTimeout = setTimeout(
+      () => {
+        this.pause();
+        this.clearSleepTimer();
+      },
+      minutes * 60 * 1000,
+    );
+
+    this.sleepTimerBtn.classList.add("active");
+    this.sleepTimerDisplay.classList.add("active");
+    this.updateSleepTimerDisplay();
+  }
+
+  clearSleepTimer() {
+    if (this.sleepTimerTimeout) {
+      clearTimeout(this.sleepTimerTimeout);
+      this.sleepTimerTimeout = null;
+    }
+    if (this.sleepTimerInterval) {
+      clearInterval(this.sleepTimerInterval);
+      this.sleepTimerInterval = null;
+    }
+    this.sleepTimerEndTime = null;
+
+    if (this.sleepTimerBtn) {
+      this.sleepTimerBtn.classList.remove("active");
+    }
+    if (this.sleepTimerDisplay) {
+      this.sleepTimerDisplay.classList.remove("active");
+      this.sleepTimerDisplay.textContent = "";
+    }
+  }
+
+  updateSleepTimerDisplay() {
+    if (!this.sleepTimerEndTime || !this.sleepTimerDisplay) return;
+
+    const remaining = Math.max(0, this.sleepTimerEndTime - Date.now());
+    const minutes = Math.floor(remaining / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+
+    this.sleepTimerDisplay.textContent = `${minutes}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
+  }
+
+  setupBackgroundSwitcher() {
+    if (!this.bgSwitcherBtn || !this.bgSwitcherMenu) return;
+
+    this.bgSwitcherBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      this.bgSwitcherMenu.classList.toggle("active");
+      if (this.sleepTimerMenu) {
+        this.sleepTimerMenu.classList.remove("active");
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (
+        !this.bgSwitcherMenu.contains(e.target) &&
+        e.target !== this.bgSwitcherBtn
+      ) {
+        this.bgSwitcherMenu.classList.remove("active");
+      }
+    });
+
+    this.bgSwitcherMenu
+      .querySelectorAll(".bg-switcher-option")
+      .forEach((option) => {
+        option.addEventListener("click", () => {
+          const mode = option.dataset.mode;
+          this.setBackgroundMode(mode);
+          this.bgSwitcherMenu.classList.remove("active");
+        });
+      });
+
+    if (this.backgroundMode === "album") {
+      this.bgSwitcherBtn.innerHTML = '<i class="fas fa-compact-disc"></i>';
+      this.bgSwitcherBtn.classList.add("active");
+      this.bgSwitcherMenu
+        .querySelectorAll(".bg-switcher-option")
+        .forEach((opt) => {
+          opt.classList.toggle("active", opt.dataset.mode === "album");
+        });
+      if (this.backgroundChangeInterval) {
+        clearInterval(this.backgroundChangeInterval);
+        this.backgroundChangeInterval = null;
+      }
+    }
+  }
+
+  setBackgroundMode(mode) {
+    this.backgroundMode = mode;
+    localStorage.setItem("harmony_bg_mode", mode);
+
+    this.bgSwitcherMenu
+      .querySelectorAll(".bg-switcher-option")
+      .forEach((opt) => {
+        opt.classList.toggle("active", opt.dataset.mode === mode);
+      });
+
+    if (mode === "album") {
+      this.bgSwitcherBtn.innerHTML = '<i class="fas fa-compact-disc"></i>';
+      this.bgSwitcherBtn.classList.add("active");
+      if (this.backgroundChangeInterval) {
+        clearInterval(this.backgroundChangeInterval);
+        this.backgroundChangeInterval = null;
+      }
+      const song = this.songs[this.currentSongIndex];
+      if (song) {
+        this.updateAlbumBackground(song.albumArt);
+      }
+    } else {
+      this.bgSwitcherBtn.innerHTML = '<i class="fas fa-image"></i>';
+      this.bgSwitcherBtn.classList.remove("active");
+
+      const overlay = document.getElementById("albumGradientOverlay");
+      if (overlay) {
+        overlay.remove();
+      }
+
+      this.backgroundBlur.style.filter = "blur(20px)";
+      this.backgroundBlur.style.transform = "scale(1)";
+      this.backgroundBlur.style.transition = "all 0.5s ease-in-out";
+
+      this.updateBackground(true);
+      this.startBackgroundRotation();
+    }
+  }
+
+  async performCrossfade(nextIndex) {
+    if (!this.crossfadeEnabled || this.isCrossfading) {
+      return false;
+    }
+
+    const currentSong = this.songs[this.currentSongIndex];
+    const nextSong = this.songs[nextIndex];
+
+    if (!currentSong || !nextSong) return false;
+
+    this.isCrossfading = true;
+
+    this.crossfadeAudio = new Audio();
+    this.crossfadeAudio.src = nextSong.src;
+    this.crossfadeAudio.crossOrigin = "anonymous";
+    this.crossfadeAudio.volume = 0;
+
+    try {
+      await new Promise((resolve, reject) => {
+        this.crossfadeAudio.addEventListener("canplay", resolve, {
+          once: true,
+        });
+        this.crossfadeAudio.addEventListener("error", reject, { once: true });
+        this.crossfadeAudio.load();
+      });
+
+      await this.crossfadeAudio.play();
+
+      const startVolume = this.audioPlayer.volume;
+      const steps = 30;
+      const stepDuration = this.crossfadeDuration / steps;
+
+      for (let i = 0; i <= steps; i++) {
+        const progress = i / steps;
+        this.audioPlayer.volume = startVolume * (1 - progress);
+        this.crossfadeAudio.volume = startVolume * progress;
+        await new Promise((r) => setTimeout(r, stepDuration));
+      }
+
+      this.audioPlayer.pause();
+      this.audioPlayer.src = nextSong.src;
+      this.audioPlayer.currentTime = this.crossfadeAudio.currentTime;
+      this.audioPlayer.volume = startVolume;
+      await this.audioPlayer.play();
+
+      this.crossfadeAudio.pause();
+      this.crossfadeAudio.src = "";
+      this.crossfadeAudio = null;
+
+      this.isCrossfading = false;
+      return true;
+    } catch (error) {
+      console.error("Crossfade error:", error);
+      this.isCrossfading = false;
+
+      if (this.crossfadeAudio) {
+        this.crossfadeAudio.pause();
+        this.crossfadeAudio.src = "";
+        this.crossfadeAudio = null;
+      }
+      this.audioPlayer.volume = 1;
+      return false;
     }
   }
 }
